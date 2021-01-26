@@ -3,23 +3,17 @@
 
 ## Document d’architecture 
 
-
 ### Contexte
 
 Ce projet a pour objet la réalisation d’un logiciel de transfert. Pour cela, nous suivrons une architecture de type client serveur schématisée ci-après. L’objectif est que les utilisateurs puissent télécharger, charger, supprimer et partager des fichiers entre eux. L’ensemble des fonctionnalités sera utilisable via des commandes dans une CLI.
 
-
 ### Architecture
 
-
-![](https://docs.google.com/drawings/d/12345/export/png)
-
+![](https://media.discordapp.net/attachments/802123360091635724/803631964883910716/TP_Securite_des_applications.png)
 
 ### Objets
 
 Dossier
-
-
 
 *   id propriétaire
 *   liste user autorisés à créer
@@ -27,16 +21,12 @@ Dossier
 
 Fichier
 
-
-
 *   Nom de fichier (string) 
 *   Users autorisés (dictionnaire de permissions à true/false pour chaque user)
 *   User owner (user)
 *   Chemin d’accès (unique)
 
 User
-
-
 
 *   Login
 *   Mot de passe (Stocké hashé côté client et salé)
@@ -51,7 +41,7 @@ User
 
 ### Personae
 
-**Admin: **
+**Admin:**
 
 
 
@@ -62,7 +52,7 @@ User
 
 **Utilisateur :**
 
-**	Propriétaire :**
+**Propriétaire :**
 
 
 
@@ -97,7 +87,7 @@ User
 *   Supprimer un fichier
 *   Ecraser un fichier
 
-**Gestion des permissions pour un dossier **
+**Gestion des permissions pour un dossier**
 
 
 
@@ -131,9 +121,7 @@ Dans un premier temps, le serveur ne gérera pas le multi-thread.
 
 Si nous en avons le temps, le but est que chaque commande reçue par le serveur soit gérée dans un thread à part pour permettre le traitement en parallèle des commandes.
 
-
 ## Analyse de risques
-
 
 <table>
   <tr>
@@ -222,12 +210,9 @@ Si nous en avons le temps, le but est que chaque commande reçue par le serveur 
   </tr>
 </table>
 
-
 **Légende**
 
 Impact :
-
-
 
 *   Insignifiant
 *   Signifiant
@@ -235,8 +220,6 @@ Impact :
 *   Catastrophique
 
 Probabilité d'occurrence
-
-
 
 *   Fréquent
 *   Probable
@@ -268,8 +251,6 @@ Probabilité d'occurrence
 
 **Arborescence:**
 
-
-
 *   **Serveur implémente le traitement**
 *   users
 *   config
@@ -286,10 +267,6 @@ Probabilité d'occurrence
         *   download
         *   share
 
-
-## 
-
-
 ## Document d’installation
 
 Récupérer les dossiers
@@ -299,10 +276,6 @@ Ouvrir un terminal
 Lancer le serveur en tâche de fond
 
 Lancer le client
-
-
-## 
-
 
 ## Document d’utilisation
 
