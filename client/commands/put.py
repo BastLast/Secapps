@@ -2,10 +2,15 @@ import yaml
 
 
 def put(args):
-    file = open(args[1])
-    serialized_file = yaml.safe_dump(file).encode("UTF-8")
+    file = open(args[1], "rb")
+    serialized_file = yaml.safe_dump(file)
 
-    server_instruction = "PUT" + serialized_file
+    data = {
+        'args': args,
+        'serialized_file': serialized_file
+    }
+
+    server_instruction = yaml.safe_dump(data).encode("UTF-8")
     # faire le chiffrement du message ici :
 
-    return
+    return server_instruction
