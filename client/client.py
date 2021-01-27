@@ -1,15 +1,19 @@
 # Définition d'un client réseau gérant en parallèle l'émission
 # et la réception des messages (utilisation de 2 THREADS).
 
+import socket
+import sys
+import threading
+import yaml
+
 host = '127.0.0.1'
 port = 40000
 
-import socket, sys, threading
+
 
 
 class ThreadReception(threading.Thread):
-    """objet thread gérant la réception des messages"""
-
+    # objet thread gérant la réception des messages
     def __init__(self, conn):
         threading.Thread.__init__(self)
         self.connexion = conn  # réf. du socket de connexion
@@ -28,7 +32,7 @@ class ThreadReception(threading.Thread):
 
 
 class ThreadEmission(threading.Thread):
-    """objet thread gérant l'émission des messages"""
+    #objet thread gérant l'émission des messages
 
     def __init__(self, conn):
         threading.Thread.__init__(self)
@@ -52,10 +56,10 @@ class ThreadEmission(threading.Thread):
 
     def run(self):
         while 1:
-            message_toparse = input()
-            message_emis = "\ ".join(self.parseargs(message_toparse))
-            self.connexion.send(message_emis.encode("utf-8"))
-
+            docexemple = {'truc1': "yolo", 'truc2': "yolo2"}
+            input() == "true"
+            message_emis = yaml.safe_dump(docexemple).encode("UTF-8")
+            self.connexion.send(message_emis)
 
 # Programme principal - Établissement de la connexion :
 connexion = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
