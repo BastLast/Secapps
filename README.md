@@ -11,6 +11,9 @@ Ce projet a pour objet la réalisation d’un logiciel de transfert. Pour cela, 
 
 ![](https://media.discordapp.net/attachments/802123360091635724/803631964883910716/TP_Securite_des_applications.png)
 
+### Interface
+Nous utiliserons yaml pour faire transiter les commandes sérialisées en tant que string entre client et serveur.
+
 ### Objets
 
 Dossier
