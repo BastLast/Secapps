@@ -85,7 +85,7 @@ while 1:
     # Créer un nouvel objet thread pour gérer la connexion :
     th = ThreadClient(connexion)
     conn_client[th.getName() ] = connexion
-    th.run()
+    th.start()
 
 
 
