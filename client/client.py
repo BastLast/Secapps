@@ -57,7 +57,7 @@ class ThreadEmission(threading.Thread):
     def run(self):
         while 1:
             docexemple = {'truc1': "yolo", 'truc2': "yolo2"}
-            input() == "true"
+            args = parseargs(input())
             message_emis = yaml.safe_dump(docexemple).encode("UTF-8")
             self.connexion.send(message_emis)
 
