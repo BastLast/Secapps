@@ -39,7 +39,6 @@ class ThreadEmission(threading.Thread):
     @staticmethod
     def parseargs(message):
         m_quotes = message.split("\"")
-        print(m_quotes)
         m_parsed = []
         i = 0
         for m in m_quotes:
