@@ -6,17 +6,19 @@ port = 40000
 
 import socket, sys, threading
 
+
 class ThreadReception(threading.Thread):
     """objet thread gérant la réception des messages"""
+
     def __init__(self, conn):
         threading.Thread.__init__(self)
-        self.connexion = conn           # réf. du socket de connexion
+        self.connexion = conn  # réf. du socket de connexion
 
     def run(self):
         while 1:
             message_recu = self.connexion.recv(1024).decode("utf-8")
             print("*" + message_recu + "*")
-            if message_recu =='' or message_recu.upper() == "FIN":
+            if message_recu == '' or message_recu.upper() == "FIN":
                 break
         # Le thread <réception> se termine ici.
         # On force la fermeture du thread <émission> :
@@ -24,16 +26,37 @@ class ThreadReception(threading.Thread):
         print("Client arrêté. Connexion interrompue.")
         self.connexion.close()
 
+
 class ThreadEmission(threading.Thread):
     """objet thread gérant l'émission des messages"""
+
     def __init__(self, conn):
         threading.Thread.__init__(self)
-        self.connexion = conn           # réf. du socket de connexion
+        self.connexion = conn  # réf. du socket de connexion
+
+    #parse arguments from message
+    #message : string
+    @staticmethod
+    def parseargs(message):
+        m_quotes = message.split("\"")
+        print(m_quotes)
+        m_parsed = []
+        i = 0
+        for m in m_quotes:
+            if i:
+                m_parsed.append(m)
+            else:
+                m_parsed += m.split(" ")
+            i += 1
+        m_parsed = [m for m in m_parsed if m != ""]
+        return m_parsed;
 
     def run(self):
         while 1:
-            message_emis = input().encode("utf-8")
-            self.connexion.send(message_emis)
+            message_toparse = input()
+            message_emis = "\ ".join(self.parseargs(message_toparse))
+            self.connexion.send(message_emis.encode("utf-8"))
+
 
 # Programme principal - Établissement de la connexion :
 connexion = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
