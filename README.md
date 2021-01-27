@@ -184,7 +184,7 @@ Si nous en avons le temps, le but est que chaque commande reçue par le serveur 
    <td>Interception communication client - serveur
    </td>
    <td>Grave
-   </td>
+   </td>µ
    <td>Probable
    </td>
    <td> Moyenne
