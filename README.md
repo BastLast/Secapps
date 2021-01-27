@@ -67,7 +67,7 @@ User
     *   Télécharger un fichier (s’il en a l’autorisation)
     *   Envoyer un fichier (s’il en a l’autorisation)
     *   Supprimer un fichier (s’il en a l’autorisation)
-    *   Ecraser un fichier (s’il en a l’autorisation)
+    *   Écraser un fichier (s’il en a l’autorisation)
     *   Créer un fichier (s’il en a l’autorisation)
 
 
@@ -233,7 +233,7 @@ Probabilité d'occurrence
 
 **Langage:** Python 3.9.1
 
-**Librairie de log utilisée:** daiquiri
+**Librairie de log utilisée :** daiquiri
 
 **Librairie de chiffrement et de hachage utilisée :** cryptodome
 
@@ -241,9 +241,9 @@ Probabilité d'occurrence
 
 **Suivre les recommandations PEP 8 :** [https://www.python.org/dev/peps/pep-0008/](https://www.python.org/dev/peps/pep-0008/)
 
-**Message de commit:** suivre le format “Type de modification - Méthode en question”  à raison d’un commit par méthode. Commit sur la branche de la méthode.
+**Message de commit :** suivre le format “Type de modification - Méthode en question”  à raison d’un commit par méthode. Commit sur la branche de la méthode.
 
-**Pour chaque méthode**: créer un header via commentaire pour indiquer sa fonction et éventuellement ses paramètres.
+**Pour chaque méthode :** créer un header via commentaire pour indiquer sa fonction et éventuellement ses paramètres.
 
 **Arborescence:**
 
