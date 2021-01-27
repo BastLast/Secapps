@@ -1,0 +1,26 @@
+{
+  "Drapht@0": {
+    "login" : "Bastien",
+    "password" : "1c798737151fc84d50f5f92c9cd8723c38768c86a3c9cd5c2ad00773094abd00",
+    "id" : "0",
+    "pseudo" : "Drapht",
+    "admin" : "False",
+    "pub_key" : ""
+  },
+  "un_phoque@1": {
+    "login" : "Alex",
+    "password" : "4030ac86a1e86956c1187b148ba2af191f6af4679aae6d3ea6154e890f1e14d4",
+    "id" : "1",
+    "pseudo" : "un_phoque",
+    "admin" : "False",
+    "pub_key" : ""
+  },
+  "Gosu@2": {
+    "login" : "Florian",
+    "password" : "9ff196d9d77e9ec8af2e05deeb7505fc302be42bdadf672265458ead16b4dbc7",
+    "id" : "2",
+    "pseudo" : "Gosu",
+    "admin" : "False",
+    "pub_key" : ""
+  }
+}
