@@ -1,4 +1,4 @@
-class Folder():
+class Folder:
     id = 0
     nom = ""
     list_user = []
