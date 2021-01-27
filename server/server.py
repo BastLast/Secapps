@@ -20,7 +20,7 @@ class ThreadClient(threading.Thread):
         # Dialogue avec le client :
         nom = self.getName()  # Chaque thread possède un nom
         while 1:
-            receivedmessage = yaml.safe_dump(self.connexion.recv(1024).decode("UTF-8"))
+            receivedmessage = self.connexion.recv(1024).decode("UTF-8")
             receiveddoc = yaml.safe_load(receivedmessage)
             if receivedmessage.upper() == "FIN" or receivedmessage == "":
                 break
