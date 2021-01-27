@@ -1,6 +1,7 @@
 # Définition d'un client réseau gérant en parallèle l'émission
 # et la réception des messages (utilisation de 2 THREADS).
-
+import hashlib
+import os
 import socket
 import sys
 import threading
@@ -73,17 +74,34 @@ class ThreadEmission(threading.Thread):
 
 
 # Programme principal - Établissement de la connexion :
-connexion = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
 try:
-    connexion.connect((host, port))
+    client_socket.connect((host, port))
+    #salt = client_socket.recv(2048)
+    response = client_socket.recv(2048)
+    # Input UserName
+    name = input(response.decode('utf-8'))
+    client_socket.send(name.encode('utf-8'))
+    response = client_socket.recv(2048)
+    # Input Password
+    salt = b'\xf0\xa4\x1f;\xcbZ\xf41\xb4k{T\xac\x8ea\x9a'
+    password = hashlib.pbkdf2_hmac('sha256', input(response.decode('utf-8')).encode('utf-8'), salt, 100000).hex()
+    client_socket.send(password.encode('utf-8'))
+    response = client_socket.recv(2048)
+    if response.decode('utf-8') == "Enregistrement réussi" or response.decode('utf-8') == "Connexion réussie":
+        # Dialogue avec le serveur : on lance deux threads pour gérer
+        # indépendamment l'émission et la réception des messages :
+        print(response.decode('utf-8'))
+        th_E = ThreadEmission(client_socket)
+        th_R = ThreadReception(client_socket)
+        th_E.start()
+        th_R.start()
+    else:
+        print(response.decode('utf-8'))
 except socket.error:
     print("La connexion a échoué.")
     sys.exit()
-print("Connexion établie avec le serveur.")
 
-# Dialogue avec le serveur : on lance deux threads pour gérer
-# indépendamment l'émission et la réception des messages :
-th_E = ThreadEmission(connexion)
-th_R = ThreadReception(connexion)
-th_E.start()
-th_R.start()
+
+
