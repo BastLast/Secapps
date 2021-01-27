@@ -8,6 +8,7 @@ import socket
 import sys
 import threading
 import yaml
+import json
 
 
 class ThreadClient(threading.Thread):
@@ -17,21 +18,53 @@ class ThreadClient(threading.Thread):
         self.connexion = conn
 
     def run(self):
+        # Récupère le fichier json des utilisateurs
+        with open("users.json", "r") as read_users:
+            data = json.load(read_users)
         # Dialogue avec le client :
-        nom = self.getName()  # Chaque thread possède un nom
-        while 1:
+        #with open("config.json", "r") as read_config:
+            #data2 = json.load(read_config)
+            #print(data2.get("Salt"))
+            #self.connexion.send(data2.get("Salt"))
+        name = self.getName()  # Chaque thread possède un nom
+        self.connexion.send("Entrez votre login : ".encode('utf-8'))
+        login = self.connexion.recv(2048).decode("utf-8")
+        self.connexion.send('Entrez votre mot de passe : '.encode('utf-8'))
+        password = self.connexion.recv(2048).decode("utf-8")
+        for pseudoId, user in data.items():
+            if login == user.get("login"):
+                exist = True
+                pseudo_id = pseudoId
+        # Cas nouvel utilisateur
+        if not exist:
+            self.connexion.send("Enregistrement et connexion réussi".encode('utf-8'))
+            print("Enregistré : ", login)
+            can_connect = True
+
+        else:
+            # Cas utilisateur existe déjà
+            if data.get(pseudo_id).get("password") == password:
+                self.connexion.send("Connexion réussie".encode('utf-8'))
+                print('Connexion réussie : ', login)
+                can_connect = True
+            else:
+                self.connexion.send("Connexion échouée".encode('utf-8'))
+                print('Connexion échouée : ', login)
+                can_connect = False
+        while can_connect:
             receivedmessage = self.connexion.recv(1024).decode("UTF-8")
             receiveddoc = yaml.safe_load(receivedmessage)
             if receivedmessage.upper() == "FIN" or receivedmessage == "":
                 break
-            message = "%s> %s" % (nom, receivedmessage)
+            message = "%s> %s" % (name, receivedmessage)
             print(receiveddoc)
             receiveddoc
 
         # Fermeture de la connexion :
         self.connexion.close()  # couper la connexion côté serveur
-        del conn_client[nom]  # supprimer son entrée dans le dictionnaire
-        print("Client %s déconnecté." % nom)
+        if name in conn_client:
+            del conn_client[name]  # supprimer son entrée dans le dictionnaire
+        print("Client %s déconnecté." % name)
         # Le thread se termine ici
 
 
@@ -51,11 +84,8 @@ while 1:
     connexion, adresse = mySocket.accept()
     # Créer un nouvel objet thread pour gérer la connexion :
     th = ThreadClient(connexion)
-    th.start()
-    # Mémoriser la connexion dans le dictionnaire :
-    it = th.getName()  # identifiant du thread
-    conn_client[it] = connexion
-    print("Client %s connecté, adresse IP %s, port %s." % \
-          (it, adresse[0], adresse[1]))
-    # Dialogue avec le client :
-    connexion.send("Vous êtes connecté. Envoyez vos messages.".encode("utf-8"))
+    conn_client[th.getName() ] = connexion
+    th.run()
+
+
+
