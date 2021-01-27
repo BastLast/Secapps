@@ -1,4 +1,4 @@
-class File():
+class File:
     name = ""
     owner = ""
     path = ""

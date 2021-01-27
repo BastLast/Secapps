@@ -1,4 +1,4 @@
-class User():
+class User:
     login = ""
     password = ""
     id = 0
