@@ -51,28 +51,24 @@ User
 *   Modifier les permissions sur un dossier/fichier
 
 **Utilisateur :**
+- **Propriétaire :**
 
-**Propriétaire :**
-
-
-
-*   Gérer les permissions des fichiers de son dossier
-*   Faire la liste des fichiers dans son dossier
-*   Télécharger un fichier
-*   Envoyer un fichier
-*   Supprimer un fichier
-*   Ecraser un fichier
-*   Créer un fichier
-
-	**Autre :**
+    *   Gérer les permissions des fichiers de son dossier
+    *   Faire la liste des fichiers dans son dossier
+    *   Télécharger un fichier
+    *   Envoyer un fichier
+    *   Supprimer un fichier
+    *   Ecraser un fichier
+    *   Créer un fichier
 
 
+- **Autre :**
 
-*   Télécharger un fichier (s’il en a l’autorisation)
-*   Envoyer un fichier (s’il en a l’autorisation)
-*   Supprimer un fichier (s’il en a l’autorisation)
-*   Ecraser un fichier (s’il en a l’autorisation)
-*   Créer un fichier (s’il en a l’autorisation)
+    *   Télécharger un fichier (s’il en a l’autorisation)
+    *   Envoyer un fichier (s’il en a l’autorisation)
+    *   Supprimer un fichier (s’il en a l’autorisation)
+    *   Ecraser un fichier (s’il en a l’autorisation)
+    *   Créer un fichier (s’il en a l’autorisation)
 
 
 ### Gestion des permissions
@@ -143,9 +139,9 @@ Si nous en avons le temps, le but est que chaque commande reçue par le serveur 
    </td>
    <td> Rare
    </td>
-   <td>
+   <td> Forte
    </td>
-   <td>Non traité
+   <td>Avoir les autorisation admin sur la machine pour lire les fichiers sensibles
    </td>
   </tr>
   <tr>
@@ -155,7 +151,7 @@ Si nous en avons le temps, le but est que chaque commande reçue par le serveur 
    </td>
    <td>Hautement improbable
    </td>
-   <td>
+   <td> Forte
    </td>
    <td>Hash
    </td>
@@ -167,7 +163,7 @@ Si nous en avons le temps, le but est que chaque commande reçue par le serveur 
    </td>
    <td>Hautement improbable
    </td>
-   <td>
+   <td> Forte
    </td>
    <td>Non traité
    </td>
@@ -179,7 +175,7 @@ Si nous en avons le temps, le but est que chaque commande reçue par le serveur 
    </td>
    <td>Hautement improbable
    </td>
-   <td>
+   <td> Forte
    </td>
    <td>Vérification des commandes envoyées
    </td>
@@ -191,7 +187,7 @@ Si nous en avons le temps, le but est que chaque commande reçue par le serveur 
    </td>
    <td>Probable
    </td>
-   <td>
+   <td> Moyenne
    </td>
    <td>Chiffrement communication 
    </td>
@@ -203,7 +199,7 @@ Si nous en avons le temps, le but est que chaque commande reçue par le serveur 
    </td>
    <td>Probable
    </td>
-   <td>
+   <td> Très forte
    </td>
    <td>Créer une double authentification par pièce d’identité ou autre identifiant unique
    </td>
@@ -252,13 +248,14 @@ Probabilité d'occurrence
 **Arborescence:**
 
 *   **Serveur implémente le traitement**
-*   users
-*   config
-*   main
-*   commands
-*   classes
-    *   user
-    *   file
+    *   users
+    *   config
+    *   main
+    *   commands
+    *   classes
+        *   user
+        *   file
+        *   folder
 *   **Client implémente la CLI**
     *   main
     *   commands:
