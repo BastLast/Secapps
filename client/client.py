@@ -40,8 +40,7 @@ class ThreadEmission(threading.Thread):
 
     #parse arguments from message
     #message : string
-    @staticmethod
-    def parseargs(message):
+    def parseargs(self,message):
         m_quotes = message.split("\"")
         m_parsed = []
         i = 0
@@ -54,10 +53,31 @@ class ThreadEmission(threading.Thread):
         m_parsed = [m for m in m_parsed if m != ""]
         return m_parsed;
 
+    def get(self,args):
+        return "get"
+    def put(self,args):
+        return "put"
+    def ls(self,args):
+        return "ls"
+    def rm(self,args):
+        return "rm"
+    def perm(self,args):
+        return "perm"
+
+    def exec_command(self,args):
+        return {
+            'get':self.get(args),
+            'put':self.put(args),
+            'ls':self.ls(args),
+            'rm':self.rm(args),
+            'perm':self.perm(args)
+        }.get(args[0],"Unrecognized command.")
+
     def run(self):
         while 1:
             docexemple = {'truc1': "yolo", 'truc2': "yolo2"}
-            input() == "true"
+            result = self.exec_command(self.parseargs(input()))
+            print(result)
             message_emis = yaml.safe_dump(docexemple).encode("UTF-8")
             self.connexion.send(message_emis)
 
