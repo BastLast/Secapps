@@ -11,6 +11,7 @@ port = 40000
 
 
 
+
 class ThreadReception(threading.Thread):
     # objet thread gérant la réception des messages
     def __init__(self, conn):
@@ -31,10 +32,27 @@ class ThreadReception(threading.Thread):
 
 
 class ThreadEmission(threading.Thread):
-    # objet thread gérant l'émission des messages
+    #objet thread gérant l'émission des messages
+
     def __init__(self, conn):
         threading.Thread.__init__(self)
         self.connexion = conn  # réf. du socket de connexion
+
+    #parse arguments from message
+    #message : string
+    @staticmethod
+    def parseargs(message):
+        m_quotes = message.split("\"")
+        m_parsed = []
+        i = 0
+        for m in m_quotes:
+            if i:
+                m_parsed.append(m)
+            else:
+                m_parsed += m.split(" ")
+            i += 1
+        m_parsed = [m for m in m_parsed if m != ""]
+        return m_parsed;
 
     def run(self):
         while 1:
@@ -42,7 +60,6 @@ class ThreadEmission(threading.Thread):
             input() == "true"
             message_emis = yaml.safe_dump(docexemple).encode("UTF-8")
             self.connexion.send(message_emis)
-
 
 # Programme principal - Établissement de la connexion :
 connexion = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
