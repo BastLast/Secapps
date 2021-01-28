@@ -2,6 +2,8 @@
 # Utilise les threads pour gérer les connexions clientes en parallèle.
 import os
 
+from Crypto.PublicKey import RSA
+
 from classes.log import Log
 
 HOST = '127.0.0.1'
@@ -39,36 +41,36 @@ class ThreadClient(threading.Thread):
         }.get(data.get('args')[0], self.nf)(data)
 
     def run(self):
-        # Récupère le fichier json des utilisateurs
-        with open("users.json", "r") as read_users:
-            data = json.load(read_users)
-        # Dialogue avec le client :
-        # with open("config.json", "r") as read_config:
-        # data2 = json.load(read_config)
-        # print(data2.get("Salt"))
-        # self.connexion.send(data2.get("Salt"))
-        name = self.getName()  # Chaque thread possède un nom
-        self.connexion.send("Entrez votre login : ".encode('utf-8'))
+        self.connexion.send("Entrez votre login : ".encode('utf-8'))     # Demande login
         login = self.connexion.recv(2048).decode("utf-8")
-        self.connexion.send('Entrez votre mot de passe : '.encode('utf-8'))
+        self.connexion.send('Entrez votre mot de passe : '.encode('utf-8'))     # Demande pw
         password = self.connexion.recv(2048).decode("utf-8")
         exist = False
-        for pseudoId, user in data.items():
-            if login == user.get("login"):
-                exist = True
-                pseudo_id = pseudoId
+        self.connexion.send("pubkey".encode('utf-8'))     # Demande pubkey client
+        pubkey = self.connexion.recv(2048).decode("utf-8")
+        self.connexion.send(RSA.import_key(open("pubkeyserv.pem").read()).export_key())  # Envoie sa clé public
+        if os.path.isfile("users.json") and os.path.getsize("users.json") > 0:
+            with open("users.json", "r") as read_users:
+                data = json.load(read_users)
+            for pseudoId, user in data.items():     # Test si le login envoyé correspond à un compte stocké
+                if login == user.get("login"):
+                    exist = True
+                    pseudo_id = pseudoId
         # Cas nouvel utilisateur
         if not exist:
             self.connexion.send("Enregistrement et connexion réussi".encode('utf-8'))
             print("Enregistré : ", login)
             can_connect = True
-
         else:
             # Cas utilisateur existe déjà
             if data.get(pseudo_id).get("password") == password:
                 self.connexion.send("Connexion réussie".encode('utf-8'))
                 print('Connexion réussie : ', login)
                 can_connect = True
+                if data.get(pseudo_id).get("pub_key") == "":
+                    with open("users.json", "w") as list_user:
+                        data[pseudo_id]["pub_key"] = pubkey
+                        json.dump(data, list_user)
             else:
                 self.connexion.send("Connexion échouée".encode('utf-8'))
                 print('Connexion échouée : ', login)
@@ -80,6 +82,7 @@ class ThreadClient(threading.Thread):
 
         # Fermeture de la connexion :
         self.connexion.close()  # couper la connexion côté serveur
+        name = self.getName()
         if name in conn_client:
             del conn_client[name]  # supprimer son entrée dans le dictionnaire
         print("Client %s déconnecté." % name)
@@ -95,6 +98,18 @@ try:
 except socket.error:
     print("La liaison du socket à l'adresse choisie a échoué.")
     sys.exit()
+f = open('prvkeyserv.pem', 'rb')
+if "-----BEGIN RSA PRIVATE KEY-----" != f.readline().rstrip().decode("utf-8"):
+    f.close()
+    key = RSA.generate(2048)
+    private_key = key.export_key()
+    public_key = key.publickey().export_key()
+    f = open('prvkeyserv.pem', 'wb')
+    f.write(private_key)
+    f2 = open('pubkeyserv.pem', 'wb')
+    f2.write(public_key)
+    f2.close()
+f.close()
 print("Serveur prêt, en attente de requêtes ...")
 mySocket.listen(5)
 
