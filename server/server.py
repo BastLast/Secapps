@@ -13,6 +13,12 @@ import threading
 import yaml
 import json
 
+from commands.get import get
+from commands.ls import ls
+from commands.perm import perm
+from commands.put import put
+from commands.rm import rm
+
 
 class ThreadClient(threading.Thread):
     # objet thread pour gérer la connexion avec un client
@@ -20,15 +26,27 @@ class ThreadClient(threading.Thread):
         threading.Thread.__init__(self)
         self.connexion = conn
 
+    def nf(self, args):
+        return "Unrecognized command."
+
+    def exec_command(self, args):
+        return {
+            'get': get,
+            'put': put,
+            'ls': ls,
+            'rm': rm,
+            'perm': perm
+        }.get(args[0], self.nf)(args)
+
     def run(self):
         # Récupère le fichier json des utilisateurs
         with open("users.json", "r") as read_users:
             data = json.load(read_users)
         # Dialogue avec le client :
-        #with open("config.json", "r") as read_config:
-            #data2 = json.load(read_config)
-            #print(data2.get("Salt"))
-            #self.connexion.send(data2.get("Salt"))
+        # with open("config.json", "r") as read_config:
+        # data2 = json.load(read_config)
+        # print(data2.get("Salt"))
+        # self.connexion.send(data2.get("Salt"))
         name = self.getName()  # Chaque thread possède un nom
         self.connexion.send("Entrez votre login : ".encode('utf-8'))
         login = self.connexion.recv(2048).decode("utf-8")
@@ -58,11 +76,12 @@ class ThreadClient(threading.Thread):
         while can_connect:
             receivedmessage = self.connexion.recv(1024).decode("UTF-8")
             receiveddoc = yaml.safe_load(receivedmessage)
-            if receivedmessage.upper() == "FIN" or receivedmessage == "":
-                break
+            # if receivedmessage.upper() == "FIN" or receivedmessage == "":
+            #     break
+            print(self.exec_command(receiveddoc.get('args')))
             message = "%s> %s" % (name, receivedmessage)
-            print(receiveddoc)
-            receiveddoc
+            # print(receiveddoc)
+            # receiveddoc
 
         # Fermeture de la connexion :
         self.connexion.close()  # couper la connexion côté serveur
@@ -90,7 +109,5 @@ while 1:
     connexion, adresse = mySocket.accept()
     # Créer un nouvel objet thread pour gérer la connexion :
     th = ThreadClient(connexion)
-    conn_client[th.getName() ] = connexion
+    conn_client[th.getName()] = connexion
     th.start()
-
-
