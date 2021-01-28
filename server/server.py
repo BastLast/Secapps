@@ -76,12 +76,7 @@ class ThreadClient(threading.Thread):
         while can_connect:
             receivedmessage = self.connexion.recv(1024).decode("UTF-8")
             receiveddoc = yaml.safe_load(receivedmessage)
-            # if receivedmessage.upper() == "FIN" or receivedmessage == "":
-            #     break
             print(self.exec_command(receiveddoc.get('args')))
-            message = "%s> %s" % (name, receivedmessage)
-            # print(receiveddoc)
-            # receiveddoc
 
         # Fermeture de la connexion :
         self.connexion.close()  # couper la connexion côté serveur
