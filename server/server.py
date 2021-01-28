@@ -1,5 +1,8 @@
 # Définition d'un serveur réseau gérant un système de CHAT simplifié.
 # Utilise les threads pour gérer les connexions clientes en parallèle.
+import os
+
+from classes.log import Log
 
 HOST = '127.0.0.1'
 PORT = 40000
@@ -31,6 +34,7 @@ class ThreadClient(threading.Thread):
         login = self.connexion.recv(2048).decode("utf-8")
         self.connexion.send('Entrez votre mot de passe : '.encode('utf-8'))
         password = self.connexion.recv(2048).decode("utf-8")
+        exist = False
         for pseudoId, user in data.items():
             if login == user.get("login"):
                 exist = True
@@ -70,8 +74,10 @@ class ThreadClient(threading.Thread):
 
 # Initialisation du serveur - Mise en place du socket :
 mySocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+log = Log().get_daiquiri()
 try:
     mySocket.bind((HOST, PORT))
+    log.error("ca run !!", somekey="test1", anotherkey="test")
 except socket.error:
     print("La liaison du socket à l'adresse choisie a échoué.")
     sys.exit()
@@ -86,6 +92,5 @@ while 1:
     th = ThreadClient(connexion)
     conn_client[th.getName() ] = connexion
     th.start()
-
 
 
