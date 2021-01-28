@@ -4,7 +4,7 @@
     "password" : "1c798737151fc84d50f5f92c9cd8723c38768c86a3c9cd5c2ad00773094abd00",
     "id" : "0",
     "pseudo" : "Drapht",
-    "admin" : "False",
+    "admin" : false,
     "pub_key" : ""
   },
   "un_phoque@1": {
@@ -12,7 +12,7 @@
     "password" : "4030ac86a1e86956c1187b148ba2af191f6af4679aae6d3ea6154e890f1e14d4",
     "id" : "1",
     "pseudo" : "un_phoque",
-    "admin" : "False",
+    "admin" : false,
     "pub_key" : ""
   },
   "Gosu@2": {
@@ -20,7 +20,7 @@
     "password" : "9ff196d9d77e9ec8af2e05deeb7505fc302be42bdadf672265458ead16b4dbc7",
     "id" : "2",
     "pseudo" : "Gosu",
-    "admin" : "False",
+    "admin" : false,
     "pub_key" : ""
   },
    "a@3": {
@@ -28,7 +28,7 @@
     "password" : "36d4ecfdbca91abc1ce5cfc116301becb7b2db7c9feb6963d8666e4b70f875b1",
     "id" : "3",
     "pseudo" : "a",
-    "admin" : "False",
+    "admin" : true,
     "pub_key" : ""
   }
 }
