@@ -1,7 +1,7 @@
 {
   "my_file.txt":{
     "content": "toto",
-    "type": "file",
+    "parent": "un_phoque@1",
     "owner": "un_phoque@1",
     "permissions": {
       "a@3": {
@@ -15,25 +15,25 @@
   },
   "un_phoque@1": {
     "content": "",
-    "type": "directory",
+    "parent": "",
     "owner": "un_phoque@1",
     "permissions": {}
   },
   "Drapht@0": {
     "content": "",
-    "type": "directory",
+    "parent": "",
     "owner": "Drapht@0",
     "permissions": {}
   },
   "Gosu@2": {
     "content": "",
-    "type": "directory",
+    "parent": "",
     "owner": "Gosu@2",
     "permissions": {}
   },
   "a@3": {
     "content": "",
-    "type": "directory",
+    "parent": "",
     "owner": "a@3",
     "permissions": {}
   }
