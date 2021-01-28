@@ -1,2 +1,3 @@
-def ls(args):
-    return args[0]
+def ls(data):
+
+    return data.get('args')[0]

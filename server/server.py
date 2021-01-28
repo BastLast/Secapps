@@ -29,14 +29,14 @@ class ThreadClient(threading.Thread):
     def nf(self, args):
         return "Unrecognized command."
 
-    def exec_command(self, args):
+    def exec_command(self, data):
         return {
             'get': get,
             'put': put,
             'ls': ls,
             'rm': rm,
             'perm': perm
-        }.get(args[0], self.nf)(args)
+        }.get(data.get('args')[0], self.nf)(data)
 
     def run(self):
         # Récupère le fichier json des utilisateurs
@@ -75,8 +75,8 @@ class ThreadClient(threading.Thread):
                 can_connect = False
         while can_connect:
             receivedmessage = self.connexion.recv(1024).decode("UTF-8")
-            receiveddoc = yaml.safe_load(receivedmessage)
-            print(self.exec_command(receiveddoc.get('args')))
+            data = yaml.safe_load(receivedmessage)
+            print(self.exec_command(data))
 
         # Fermeture de la connexion :
         self.connexion.close()  # couper la connexion côté serveur

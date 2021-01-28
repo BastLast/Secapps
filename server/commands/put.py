@@ -1,2 +1,3 @@
-def put(args):
-    return args[0]
+def put(data):
+
+    return data.get('args')[0]

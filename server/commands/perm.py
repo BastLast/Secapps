@@ -1,2 +1,3 @@
-def perm(args):
-    return args[0]
+def perm(data):
+
+    return data.get('args')[0]
