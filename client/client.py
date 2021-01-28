@@ -56,18 +56,17 @@ class ThreadEmission(threading.Thread):
         m_parsed = [m for m in m_parsed if m != ""]
         return m_parsed
 
+    def nf(self, args):
+        return "Unrecognized command."
+
     def exec_command(self, args):
-        if args[0] == 'get':
-            return get(args)
-        if args[0] == 'put':
-            return put(args)
-        if args[0] == 'ls':
-            return ls(args)
-        if args[0] == 'rm':
-            return rm(args)
-        if args[0] == 'perm':
-            return perm(args)
-        return "Unknown command"
+        return {
+            'get': get,
+            'put': put,
+            'ls': ls,
+            'rm': rm,
+            'perm': perm
+        }.get(args[0], self.nf)(args)
 
     # parse arguments from message
     # message : string

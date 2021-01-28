@@ -1,2 +1,3 @@
-def get(args):
-    return args[0]
+def get(data):
+
+    return data.get('args')[0]

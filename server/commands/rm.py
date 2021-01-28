@@ -1,2 +1,3 @@
-def rm(args):
-    return args[0]
+def rm(data):
+
+    return data.get('args')[0]
