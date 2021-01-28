@@ -1,0 +1,40 @@
+{
+  "my_file.txt":{
+    "content": "toto",
+    "type": "file",
+    "owner": "un_phoque@1",
+    "permissions": {
+      "a@3": {
+        "create": false,
+        "list": true,
+        "download": true,
+        "remove": false,
+        "overwrite": false
+      }
+    }
+  },
+  "un_phoque@1": {
+    "content": "",
+    "type": "directory",
+    "owner": "un_phoque@1",
+    "permissions": {}
+  },
+  "Drapht@0": {
+    "content": "",
+    "type": "directory",
+    "owner": "Drapht@0",
+    "permissions": {}
+  },
+  "Gosu@2": {
+    "content": "",
+    "type": "directory",
+    "owner": "Gosu@2",
+    "permissions": {}
+  },
+  "a@3": {
+    "content": "",
+    "type": "directory",
+    "owner": "a@3",
+    "permissions": {}
+  }
+}
