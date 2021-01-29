@@ -6,6 +6,8 @@ import os
 import socket
 import sys
 import threading
+from time import sleep
+
 import yaml
 from Crypto.Cipher import PKCS1_OAEP, AES
 from Crypto.Random import get_random_bytes
@@ -80,7 +82,20 @@ class ThreadEmission(threading.Thread):
     def run(self):
         while 1:
             result = self.exec_command(self.parseargs(input()))
-            #A tester: recupère la clé public du serv et s'en sert pour chiffrer avant d'envoyer
+            self.connexion.send("DEBUT".encode("utf-8"))
+            f = open("server_instruction", 'wb')
+            f.write(result)
+            f.close()
+            f = open("server_instruction", 'rb')
+            senddata = f.read(1024)
+            while senddata:
+                self.connexion.send(senddata)
+                senddata = f.read(1024)
+                print(senddata)
+            sleep(1)
+            self.connexion.send("FIN".encode("utf-8"))
+            f.close()
+            # A tester: recupère la clé public du serv et s'en sert pour chiffrer avant d'envoyer
             # with open("publicclient.json", "r") as publicclient:
             #     public_key = RSA.import_key(json.load(publicclient)["server"].encode('utf-8'), passphrase=secret_code)
             #     session_key = get_random_bytes(16)
@@ -95,7 +110,7 @@ class ThreadEmission(threading.Thread):
             #     result = open("result.bin", "wb")
             #     [result.write(x) for x in (enc_session_key, cipher_aes.nonce, tag, ciphertext)]
             #     result.close()
-            self.connexion.send(result)
+
 
 
 # Programme principal - Établissement de la connexion :
@@ -103,15 +118,15 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 try:
     client_socket.connect((host, port))
-    response = client_socket.recv(2048)     # Demande login par serveur
+    response = client_socket.recv(2048)  # Demande login par serveur
     name = input(response.decode('utf-8'))
     if name == "server":
         name = input("Ce pseudo n'est pas autorisé, veuillez en choisir un nouveau svp :")
-    client_socket.send(name.encode('utf-8'))     # Envoi login
-    response = client_socket.recv(2048)     # Demande password par serveur
+    client_socket.send(name.encode('utf-8'))  # Envoi login
+    response = client_socket.recv(2048)  # Demande password par serveur
     salt = b'\xf0\xa4\x1f;\xcbZ\xf41\xb4k{T\xac\x8ea\x9a'
     password = hashlib.pbkdf2_hmac('sha256', input(response.decode('utf-8')).encode('utf-8'), salt, 100000).hex()
-    client_socket.send(password.encode('utf-8'))     # Envoie password
+    client_socket.send(password.encode('utf-8'))  # Envoie password
     response = client_socket.recv(2048)  # Demande pubkey par serveur
     if response.decode('utf-8') == "pubkey":
         if os.path.getsize("privateclient.json") > 0 and os.path.getsize("publicclient.json") > 0:
@@ -146,11 +161,11 @@ try:
                 datapublic = {name: public_key.decode('utf-8')}
                 json.dump(datapublic, publicclient)
         client_socket.send(public_key)
-        pub_key_serv = client_socket.recv(2048)     # Reçoit clé public serveur
+        pub_key_serv = client_socket.recv(2048)  # Reçoit clé public serveur
     with open("publicclient.json", "w") as publicclient:
         datapublic["server"] = pub_key_serv.decode('utf-8')
         json.dump(datapublic, publicclient)
-    response = client_socket.recv(2048)     # Serveur indique si connecté ou non
+    response = client_socket.recv(2048)  # Serveur indique si connecté ou non
     if response.decode('utf-8') == "Enregistrement réussi" or response.decode('utf-8') == "Connexion réussie":
         # Dialogue avec le serveur : on lance deux threads pour gérer
         # indépendamment l'émission et la réception des messages :

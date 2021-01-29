@@ -43,18 +43,63 @@ class ThreadClient(threading.Thread):
         }.get(data.get('args')[0], self.nf)(data)
 
     def run(self):
-        self.connexion.send("Entrez votre login : ".encode('utf-8'))     # Demande login
+        can_connect = self.logincheck()
+        receiveddata = b""
+        mergemessages = False
+        while can_connect:
+            receivedmessage = self.connexion.recv(1024)
+            if mergemessages and receivedmessage.decode("utf-8") != "FIN":
+                receiveddata = b"".join([receiveddata, receivedmessage])
+
+            if receivedmessage.decode("utf-8") == "DEBUT":
+                print("debut")
+                receiveddata = b""
+                mergemessages = True
+
+            if receivedmessage.decode("utf-8") == "FIN":
+                print("fin")
+                mergemessages = False
+
+            if not mergemessages:
+                # traitement de la commande
+                loadeddata = yaml.safe_load(receiveddata)
+                f = open("temp/" + loadeddata.get('file_name'), 'wb')
+                f.write(loadeddata.get('serialized_file'))
+                f.close()
+
+            # A tester : Recupère la clé privé du serv et dechiffre ce qui est recu
+            # file_in = open("encrypted_data.bin", "rb")
+            # private_key = RSA.import_key(open("prvkeyserv.pem").read())
+            # enc_session_key, nonce, tag, ciphertext = \
+            #     [file_in.read(x) for x in (private_key.size_in_bytes(), 16, 16, -1)]
+            # cipher_rsa = PKCS1_OAEP.new(private_key)
+            # session_key = cipher_rsa.decrypt(enc_session_key)
+            # cipher_aes = AES.new(session_key, AES.MODE_EAX, nonce)
+            # data = cipher_aes.decrypt_and_verify(ciphertext, tag)
+            # print(data.decode("utf-8"))
+            # print(self.exec_command(loadeddata))
+
+        # Fermeture de la connexion :
+        self.connexion.close()  # couper la connexion côté serveur
+        name = self.getName()
+        if name in conn_client:
+            del conn_client[name]  # supprimer son entrée dans le dictionnaire
+        print("Client %s déconnecté." % name)
+        # Le thread se termine ici
+
+    def logincheck(self):
+        self.connexion.send("Entrez votre login : ".encode('utf-8'))  # Demande login
         login = self.connexion.recv(2048).decode("utf-8")
-        self.connexion.send('Entrez votre mot de passe : '.encode('utf-8'))     # Demande pw
+        self.connexion.send('Entrez votre mot de passe : '.encode('utf-8'))  # Demande pw
         password = self.connexion.recv(2048).decode("utf-8")
         exist = False
-        self.connexion.send("pubkey".encode('utf-8'))     # Demande pubkey client
+        self.connexion.send("pubkey".encode('utf-8'))  # Demande pubkey client
         pubkey = self.connexion.recv(2048).decode("utf-8")
         self.connexion.send(RSA.import_key(open("pubkeyserv.pem").read()).export_key())  # Envoie sa clé public
         if os.path.isfile("users.json") and os.path.getsize("users.json") > 0:
             with open("users.json", "r") as read_users:
                 data = json.load(read_users)
-            for pseudoId, user in data.items():     # Test si le login envoyé correspond à un compte stocké
+            for pseudoId, user in data.items():  # Test si le login envoyé correspond à un compte stocké
                 if login == user.get("login"):
                     exist = True
                     pseudo_id = pseudoId
@@ -77,28 +122,7 @@ class ThreadClient(threading.Thread):
                 self.connexion.send("Connexion échouée".encode('utf-8'))
                 print('Connexion échouée : ', login)
                 can_connect = False
-        while can_connect:
-            receivedmessage = self.connexion.recv(1024).decode("UTF-8")
-            data = yaml.safe_load(receivedmessage)
-            # A tester : Recupère la clé privé du serv et dechiffre ce qui est recu
-            # file_in = open("encrypted_data.bin", "rb")
-            # private_key = RSA.import_key(open("prvkeyserv.pem").read())
-            # enc_session_key, nonce, tag, ciphertext = \
-            #     [file_in.read(x) for x in (private_key.size_in_bytes(), 16, 16, -1)]
-            # cipher_rsa = PKCS1_OAEP.new(private_key)
-            # session_key = cipher_rsa.decrypt(enc_session_key)
-            # cipher_aes = AES.new(session_key, AES.MODE_EAX, nonce)
-            # data = cipher_aes.decrypt_and_verify(ciphertext, tag)
-            # print(data.decode("utf-8"))
-            print(self.exec_command(data))
-
-        # Fermeture de la connexion :
-        self.connexion.close()  # couper la connexion côté serveur
-        name = self.getName()
-        if name in conn_client:
-            del conn_client[name]  # supprimer son entrée dans le dictionnaire
-        print("Client %s déconnecté." % name)
-        # Le thread se termine ici
+        return can_connect
 
 
 # Initialisation du serveur - Mise en place du socket :
@@ -108,7 +132,7 @@ try:
     mySocket.bind((HOST, PORT))
     log.error("ca run !!", somekey="test1", anotherkey="test")
 except socket.error:
-    print("La liaison du socket à l'adresse choisie a échoué." + socket.error)
+    print("La liaison du socket à l'adresse choisie a échoué.")
     sys.exit()
 f = open('prvkeyserv.pem', 'rb')
 if "-----BEGIN RSA PRIVATE KEY-----" != f.readline().rstrip().decode("utf-8"):
