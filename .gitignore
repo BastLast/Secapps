@@ -1,0 +1,21 @@
+/server/log/*
+/client/img.png
+/server/test.png
+/.idea
+/server/commands/__pycache__/*
+/server/client/__pycache__/*
+
+# Default ignored files
+/shelf/
+/workspace.xml
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+/modules.xml
+/inspectionProfiles/profiles_settings.xml
+/misc.xml
+/secapps.iml
+/vcs.xml
+
