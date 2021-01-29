@@ -11,7 +11,9 @@ def put(args):
                 'file_name': stream.name
             }
             server_instruction = yaml.safe_dump(data).encode("utf-8")
-            #print(yaml.safe_load(server_instruction))
+
+            # print(yaml.safe_load(server_instruction))
+
         except yaml.YAMLError as exc:
             print("error : " + exc)
 
