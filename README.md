@@ -304,7 +304,7 @@ Liste des commandes disponibles pour tous les utilisateurs, s’ils disposent de
 *   _perm &lt;user> &lt;add|remove> &lt;c|l|d|r|o> &lt;directory|filename>_ : modifier les permissions sur un fichier ou un dossier pour un utilisateur. 
     *   _user_ : nom de l’utilisateur à qui modifier les permissions
     *   _add/remove_ : Ajouter ou retirer les permissions
-    *   _c|l|d|r|o _: Respectivement les permissions de créer un fichier dans un dossier, de lister un fichier/répertoire, de télécharger un fichier, d’effacer un fichier, et d’écraser un fichier. Il est possible d’en utiliser plusieurs à la fois. On ne peut modifier que les permissions dont on dispose.
+    *   _c|l|d|r|o_ : Respectivement les permissions de créer un fichier dans un dossier, de lister un fichier/répertoire, de télécharger un fichier, d’effacer un fichier, et d’écraser un fichier. Il est possible d’en utiliser plusieurs à la fois. On ne peut modifier que les permissions dont on dispose.
     *   _directory|filename_ : nom du fichier ou du répertoire sur lequel appliquer ces permissions.
 
 Le rôle “Utilisateur propriétaire” possède par défaut l’ensemble des permissions sur ses dossiers et fichiers.
