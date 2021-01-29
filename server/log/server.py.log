@@ -1,1 +1,89 @@
 2021-01-28 08:52:58,174 [14156] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 10:55:18,588 [12704] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 10:55:38,489 [14684] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 10:57:47,816 [12536] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 10:59:05,484 [11916] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 11:00:03,219 [11196] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 11:00:41,548 [8344] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 11:12:44,970 [3520] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 11:13:47,909 [12360] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 11:20:23,769 [12408] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 11:20:23,769 [12408] CRITICAL root: Traceback (most recent call last):
+  File "C:\Users\Florian\PycharmProjects\secapps\server\server.py", line 100, in <module>
+    f = open('mykey.pem', 'rb')
+FileNotFoundError: [Errno 2] No such file or directory: 'mykey.pem'
+
+2021-01-28 11:20:40,840 [1048] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 11:20:40,840 [1048] CRITICAL root: Traceback (most recent call last):
+  File "C:\Users\Florian\PycharmProjects\secapps\server\server.py", line 100, in <module>
+    f = open('mykey.pem', 'rb')
+FileNotFoundError: [Errno 2] No such file or directory: 'mykey.pem'
+
+2021-01-28 11:20:42,005 [11332] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 11:20:42,005 [11332] CRITICAL root: Traceback (most recent call last):
+  File "C:\Users\Florian\PycharmProjects\secapps\server\server.py", line 100, in <module>
+    f = open('mykey.pem', 'rb')
+FileNotFoundError: [Errno 2] No such file or directory: 'mykey.pem'
+
+2021-01-28 11:20:42,211 [4792] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 11:20:42,211 [4792] CRITICAL root: Traceback (most recent call last):
+  File "C:\Users\Florian\PycharmProjects\secapps\server\server.py", line 100, in <module>
+    f = open('mykey.pem', 'rb')
+FileNotFoundError: [Errno 2] No such file or directory: 'mykey.pem'
+
+2021-01-28 11:21:32,197 [10724] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 11:21:32,197 [10724] CRITICAL root: Traceback (most recent call last):
+  File "C:\Users\Florian\PycharmProjects\secapps\server\server.py", line 100, in <module>
+    f = open('mykey.pem', 'rb')
+FileNotFoundError: [Errno 2] No such file or directory: 'mykey.pem'
+
+2021-01-28 11:21:52,577 [4556] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 11:22:29,053 [8252] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 11:22:34,994 [8108] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 11:23:41,622 [15948] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 12:19:33,893 [7220] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 12:20:33,463 [14252] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 12:21:06,945 [10196] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 12:39:17,628 [14344] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 12:39:52,827 [14448] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 12:43:23,444 [12104] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 12:44:28,369 [7184] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 12:45:38,662 [10856] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 12:48:01,521 [2828] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 12:49:42,416 [12168] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 12:50:35,802 [2928] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 12:51:33,777 [12328] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 12:53:01,345 [1548] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 12:53:57,363 [8080] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 12:54:22,787 [4848] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 12:55:03,323 [2344] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 13:00:18,007 [14568] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 13:03:13,607 [6892] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 13:24:43,058 [14656] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 13:26:18,695 [11112] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 14:32:13,473 [8104] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 14:39:01,787 [3520] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 14:42:14,945 [10756] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 15:13:57,558 [9900] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 15:55:16,556 [8704] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 15:56:09,874 [8440] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 16:00:28,469 [12640] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 16:02:23,932 [2908] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 16:04:25,747 [9184] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 16:05:21,136 [10424] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 16:06:40,408 [15460] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 16:09:21,042 [7496] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 16:10:16,759 [1920] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 16:14:05,244 [10032] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 16:14:51,612 [14900] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 16:16:52,896 [8004] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 16:19:57,439 [10760] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 16:24:06,028 [6172] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 16:27:39,475 [2636] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 16:28:15,089 [11272] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 16:35:12,360 [2496] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 16:36:58,567 [7324] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 16:37:49,690 [10380] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
+2021-01-28 16:43:52,525 [7744] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 16:44:30,552 [2968] ERROR    root [somekey: test1] [anotherkey: test]: ca run !!
+2021-01-28 16:46:24,977 [8004] ERROR    root [anotherkey: test] [somekey: test1]: ca run !!
