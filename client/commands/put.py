@@ -7,9 +7,11 @@ def put(args):
         try:
             data = {
                 'args': args,
-                'serialized_file': stream.read()
+                'serialized_file': stream.read(),
+                'file_name': stream.name
             }
-            server_instruction = yaml.dump(data).encode("UTF-8")
+            server_instruction = yaml.safe_dump(data).encode("utf-8")
+            #print(yaml.safe_load(server_instruction))
         except yaml.YAMLError as exc:
             print("error : " + exc)
 
