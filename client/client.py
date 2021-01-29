@@ -6,6 +6,8 @@ import os
 import socket
 import sys
 import threading
+from time import sleep
+
 import yaml
 from Crypto.Cipher import PKCS1_OAEP, AES
 from Crypto.Random import get_random_bytes
@@ -80,7 +82,7 @@ class ThreadEmission(threading.Thread):
     def run(self):
         while 1:
             result = self.exec_command(self.parseargs(input()))
-
+            self.connexion.send("DEBUT".encode("utf-8"))
             f = open("server_instruction", 'wb')
             f.write(result)
             f.close()
@@ -89,7 +91,9 @@ class ThreadEmission(threading.Thread):
             while senddata:
                 self.connexion.send(senddata)
                 senddata = f.read(1024)
-
+                print(senddata)
+            sleep(1)
+            self.connexion.send("FIN".encode("utf-8"))
             f.close()
             # A tester: recupère la clé public du serv et s'en sert pour chiffrer avant d'envoyer
             # with open("publicclient.json", "r") as publicclient:
