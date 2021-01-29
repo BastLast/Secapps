@@ -7,6 +7,9 @@ import socket
 import sys
 import threading
 import yaml
+from Crypto.Cipher import PKCS1_OAEP, AES
+from Crypto.Random import get_random_bytes
+
 from commands.get import get
 from commands.put import put
 from commands.ls import ls
@@ -16,6 +19,7 @@ from Crypto.PublicKey import RSA
 
 host = '127.0.0.1'
 port = 40000
+secret_code = "JackJack"
 
 
 class ThreadReception(threading.Thread):
@@ -76,6 +80,21 @@ class ThreadEmission(threading.Thread):
     def run(self):
         while 1:
             result = self.exec_command(self.parseargs(input()))
+            #A tester: recupère la clé public du serv et s'en sert pour chiffrer avant d'envoyer
+            # with open("publicclient.json", "r") as publicclient:
+            #     public_key = RSA.import_key(json.load(publicclient)["server"].encode('utf-8'), passphrase=secret_code)
+            #     session_key = get_random_bytes(16)
+            #
+            #     # Encrypt the session key with the public RSA key
+            #     cipher_rsa = PKCS1_OAEP.new(public_key)
+            #     enc_session_key = cipher_rsa.encrypt(session_key)
+            #
+            #     # Encrypt the data with the AES session key
+            #     cipher_aes = AES.new(session_key, AES.MODE_EAX)
+            #     ciphertext, tag = cipher_aes.encrypt_and_digest(result)
+            #     result = open("result.bin", "wb")
+            #     [result.write(x) for x in (enc_session_key, cipher_aes.nonce, tag, ciphertext)]
+            #     result.close()
             self.connexion.send(result)
 
 
@@ -117,7 +136,6 @@ try:
             with open("privateclient.json", "w") as privateclient:
                 json.dump(dataprivate, privateclient)
         else:
-            secret_code = "JackJack"
             key = RSA.generate(2048)
             encrypted_key = key.export_key(passphrase=secret_code, pkcs=8, protection="scryptAndAES128-CBC")
             public_key = key.publickey().export_key()
