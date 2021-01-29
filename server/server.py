@@ -2,12 +2,14 @@
 # Utilise les threads pour gérer les connexions clientes en parallèle.
 import os
 
+from Crypto.Cipher import PKCS1_OAEP, AES
 from Crypto.PublicKey import RSA
 
 from classes.log import Log
 
 HOST = '127.0.0.1'
 PORT = 40000
+secret_code = "Serveur"
 
 import socket
 import sys
@@ -78,6 +80,16 @@ class ThreadClient(threading.Thread):
         while can_connect:
             receivedmessage = self.connexion.recv(1024).decode("UTF-8")
             data = yaml.safe_load(receivedmessage)
+            # A tester : Recupère la clé privé du serv et dechiffre ce qui est recu
+            # file_in = open("encrypted_data.bin", "rb")
+            # private_key = RSA.import_key(open("prvkeyserv.pem").read())
+            # enc_session_key, nonce, tag, ciphertext = \
+            #     [file_in.read(x) for x in (private_key.size_in_bytes(), 16, 16, -1)]
+            # cipher_rsa = PKCS1_OAEP.new(private_key)
+            # session_key = cipher_rsa.decrypt(enc_session_key)
+            # cipher_aes = AES.new(session_key, AES.MODE_EAX, nonce)
+            # data = cipher_aes.decrypt_and_verify(ciphertext, tag)
+            # print(data.decode("utf-8"))
             print(self.exec_command(data))
 
         # Fermeture de la connexion :
@@ -102,7 +114,7 @@ f = open('prvkeyserv.pem', 'rb')
 if "-----BEGIN RSA PRIVATE KEY-----" != f.readline().rstrip().decode("utf-8"):
     f.close()
     key = RSA.generate(2048)
-    private_key = key.export_key()
+    private_key = key.export_key(passphrase=secret_code, pkcs=8, protection="scryptAndAES128-CBC")
     public_key = key.publickey().export_key()
     f = open('prvkeyserv.pem', 'wb')
     f.write(private_key)
