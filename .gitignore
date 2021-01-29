@@ -19,3 +19,7 @@
 /secapps.iml
 /vcs.xml
 
+
+client/commands/__pycache__/
+
+server/classes/__pycache__/
