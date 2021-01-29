@@ -108,7 +108,7 @@ try:
     mySocket.bind((HOST, PORT))
     log.error("ca run !!", somekey="test1", anotherkey="test")
 except socket.error:
-    print("La liaison du socket à l'adresse choisie a échoué.")
+    print("La liaison du socket à l'adresse choisie a échoué." + socket.error)
     sys.exit()
 f = open('prvkeyserv.pem', 'rb')
 if "-----BEGIN RSA PRIVATE KEY-----" != f.readline().rstrip().decode("utf-8"):
