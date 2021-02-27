@@ -104,14 +104,23 @@ class ThreadClient(threading.Thread):
                     pseudo_id = pseudoId
         # Cas nouvel utilisateur
         if not exist:
-            self.connexion.send("Enregistrement et connexion réussi".encode('utf-8'))
-            print("Enregistré : ", login)
+            data[login + "@" + str(len(data))] = {
+                    "login": login,
+                    "password": password,
+                    "id": str(len(data)),
+                    "pseudo": login,
+                    "admin": True,
+                    "pub_key": pubkey
+                }
+            with open("users.json", "w") as outfile:
+                json.dump(data, outfile)
             can_connect = True
+            self.connexion.send("Enregistrement réussi".encode('utf-8'))
         else:
             # Cas utilisateur existe déjà
             if data.get(pseudo_id).get("password") == password:
                 self.connexion.send("Connexion réussie".encode('utf-8'))
-                print('Connexion réussie : ', login)
+                print('Connexion réussie : ')
                 can_connect = True
                 if data.get(pseudo_id).get("pub_key") == "":
                     with open("users.json", "w") as list_user:
@@ -119,7 +128,7 @@ class ThreadClient(threading.Thread):
                         json.dump(data, list_user)
             else:
                 self.connexion.send("Connexion échouée".encode('utf-8'))
-                print('Connexion échouée : ', login)
+                print('Connexion échouée : ')
                 can_connect = False
         return can_connect
 
