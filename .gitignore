@@ -1,4 +1,4 @@
-/server/log/*
+/server/log/*.log
 /client/img.png
 /server/test.png
 /.idea
