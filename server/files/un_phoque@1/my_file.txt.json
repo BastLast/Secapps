@@ -1,0 +1,14 @@
+{
+    "content": "toto",
+    "parent": "un_phoque@1",
+    "owner": "un_phoque@1",
+    "permissions": {
+      "a@3": {
+        "c": false,
+        "l": true,
+        "d": true,
+        "r": false,
+        "o": false
+      }
+    }
+  }
