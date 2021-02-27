@@ -63,9 +63,8 @@ class ThreadClient(threading.Thread):
             if not mergemessages:
                 # traitement de la commande
                 loadeddata = yaml.safe_load(receiveddata)
-                f = open("temp/" + loadeddata.get('file_name'), 'wb')
-                f.write(loadeddata.get('serialized_file'))
-                f.close()
+                result = self.exec_command(loadeddata)
+                self.connexion.send(result.encode('utf-8'))
 
             # A tester : Recupère la clé privé du serv et dechiffre ce qui est recu
             # file_in = open("encrypted_data.bin", "rb")
