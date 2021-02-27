@@ -36,9 +36,7 @@ class ThreadReception(threading.Thread):
             print("*" + message_recu + "*")
             if message_recu == '' or message_recu.upper() == "FIN":
                 break
-        # Le thread <réception> se termine ici.
-        # On force la fermeture du thread <émission> :
-        th_E._Thread__stop()
+        th_E._stop()
         print("Client arrêté. Connexion interrompue.")
         self.connexion.close()
 
@@ -66,6 +64,7 @@ class ThreadEmission(threading.Thread):
 
     def nf(self, args):
         return "Unrecognized command."
+
 
     def exec_command(self, args):
         return {
