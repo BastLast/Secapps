@@ -1,1 +1,34 @@
-{"Drapht@0": {"login": "Bastien", "password": "1c798737151fc84d50f5f92c9cd8723c38768c86a3c9cd5c2ad00773094abd00", "id": "0", "pseudo": "Drapht", "admin": false, "pub_key": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp4PohlHNrjzjTzD4b65K\nwXuIwbXfnskz3YouLh/Pnf1iQN0f4QC4SQZnn00cmEtjj7G97bU7o+kokC6Kat9T\nDBOWBIEKhQrpaRyZl0Z3zAnR13EtdcsaScdPX0mzbHFS1U/T19BCsei9TLL4J5V9\nCD19HyRuwcmVz+St9MCQ65OacrY8gRcb4L5Y3f9iBubZmeQAJjAn704mb4zF3o3a\n0s1Ry5fsGE6Gj7OTMBri8r6FZptEKOO68nrQzfhuThmwJT+tCM0hq8FipPQTUM4g\n7GsBeIhiRigIJL96NzmqmkYXFqlHmbW/4VZVdyF9oJVAZUm8M4fOO/somNWy4BCz\n0QIDAQAB\n-----END PUBLIC KEY-----"}, "un_phoque@1": {"login": "Alex", "password": "4030ac86a1e86956c1187b148ba2af191f6af4679aae6d3ea6154e890f1e14d4", "id": "1", "pseudo": "un_phoque", "admin": false, "pub_key": ""}, "Gosu@2": {"login": "Florian", "password": "9ff196d9d77e9ec8af2e05deeb7505fc302be42bdadf672265458ead16b4dbc7", "id": "2", "pseudo": "Gosu", "admin": false, "pub_key": ""}, "a@3": {"login": "a", "password": "36d4ecfdbca91abc1ce5cfc116301becb7b2db7c9feb6963d8666e4b70f875b1", "id": "3", "pseudo": "a", "admin": true, "pub_key": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAom4ntwwevSFcjO6jdRoi\n9mt0hIEXod5rnC80s4mrtwsbsESCcVBjiv+fyD3sq0kPRZDTx2pKvUr3yv8nE+tT\n8eC7Msp5pfMBjHxYwZQG/KKxTKQB5Qg8pLJn6l+fm1vJ7SjgcS9ZAfqyyaL+n+zp\nIQyQhNPq2rKKm8vsUgbgQTHeEgp4dXCP1ri7AbqYWiVS82Pv7KaTQlWJQo/Yf2r4\ntVjEpfLqSxPnB2ApcoEyBLTOIJI5F5edR1eChLRoALyWFiLFoZPutXzzixuI/Ng7\no0C4XlVpT7OclANovulZgnc6UJCT5qIR7jUxbpOu9wTOaAdiOfAWQAUxJi2oabpM\nUwIDAQAB\n-----END PUBLIC KEY-----"}}
+{
+    "Drapht@0": {
+        "login": "Bastien",
+        "password": "1c798737151fc84d50f5f92c9cd8723c38768c86a3c9cd5c2ad00773094abd00",
+        "id": "0",
+        "pseudo": "Drapht",
+        "admin": false,
+        "pub_key": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp4PohlHNrjzjTzD4b65K\nwXuIwbXfnskz3YouLh/Pnf1iQN0f4QC4SQZnn00cmEtjj7G97bU7o+kokC6Kat9T\nDBOWBIEKhQrpaRyZl0Z3zAnR13EtdcsaScdPX0mzbHFS1U/T19BCsei9TLL4J5V9\nCD19HyRuwcmVz+St9MCQ65OacrY8gRcb4L5Y3f9iBubZmeQAJjAn704mb4zF3o3a\n0s1Ry5fsGE6Gj7OTMBri8r6FZptEKOO68nrQzfhuThmwJT+tCM0hq8FipPQTUM4g\n7GsBeIhiRigIJL96NzmqmkYXFqlHmbW/4VZVdyF9oJVAZUm8M4fOO/somNWy4BCz\n0QIDAQAB\n-----END PUBLIC KEY-----"
+    },
+    "un_phoque@1": {
+        "login": "Alex",
+        "password": "4030ac86a1e86956c1187b148ba2af191f6af4679aae6d3ea6154e890f1e14d4",
+        "id": "1",
+        "pseudo": "un_phoque",
+        "admin": false,
+        "pub_key": ""
+    },
+    "Gosu@2": {
+        "login": "Florian",
+        "password": "9ff196d9d77e9ec8af2e05deeb7505fc302be42bdadf672265458ead16b4dbc7",
+        "id": "2",
+        "pseudo": "Gosu",
+        "admin": false,
+        "pub_key": ""
+    },
+    "a@3": {
+        "login": "a",
+        "password": "36d4ecfdbca91abc1ce5cfc116301becb7b2db7c9feb6963d8666e4b70f875b1",
+        "id": "3",
+        "pseudo": "a",
+        "admin": true,
+        "pub_key": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAom4ntwwevSFcjO6jdRoi\n9mt0hIEXod5rnC80s4mrtwsbsESCcVBjiv+fyD3sq0kPRZDTx2pKvUr3yv8nE+tT\n8eC7Msp5pfMBjHxYwZQG/KKxTKQB5Qg8pLJn6l+fm1vJ7SjgcS9ZAfqyyaL+n+zp\nIQyQhNPq2rKKm8vsUgbgQTHeEgp4dXCP1ri7AbqYWiVS82Pv7KaTQlWJQo/Yf2r4\ntVjEpfLqSxPnB2ApcoEyBLTOIJI5F5edR1eChLRoALyWFiLFoZPutXzzixuI/Ng7\no0C4XlVpT7OclANovulZgnc6UJCT5qIR7jUxbpOu9wTOaAdiOfAWQAUxJi2oabpM\nUwIDAQAB\n-----END PUBLIC KEY-----"
+    }
+}

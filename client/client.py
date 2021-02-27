@@ -165,8 +165,17 @@ try:
     with open("publicclient.json", "w") as publicclient:
         datapublic["server"] = pub_key_serv.decode('utf-8')
         json.dump(datapublic, publicclient)
-    response = client_socket.recv(2048)  # Serveur indique si connecté ou non
-    if response.decode('utf-8') == "Enregistrement réussi" or response.decode('utf-8') == "Connexion réussie":
+    response = client_socket.recv(2048)  # Serveur indique si connecté ou connecté+enregistré pour nouveau utilisateur
+    if response.decode('utf-8') == "Enregistrement réussi":
+        # Dialogue avec le serveur : on lance deux threads pour gérer
+        # indépendamment l'émission et la réception des messages :
+        print(response.decode('utf-8'))
+        print("Vous êtes connecté.")
+        th_E = ThreadEmission(client_socket)
+        th_R = ThreadReception(client_socket)
+        th_E.start()
+        th_R.start()
+    elif response.decode('utf-8') == "Connexion réussie":
         # Dialogue avec le serveur : on lance deux threads pour gérer
         # indépendamment l'émission et la réception des messages :
         print(response.decode('utf-8'))
