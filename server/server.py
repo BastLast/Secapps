@@ -48,6 +48,11 @@ class ThreadClient(threading.Thread):
         mergemessages = False
         while can_connect:
             receivedmessage = self.connexion.recv(1024)
+
+            # Test if the client was disconected
+            if receivedmessage.decode("utf-8") == '' or receivedmessage.upper().decode("utf-8") == "FIN":
+                break
+
             if mergemessages and receivedmessage.decode("utf-8") != "FIN":
                 receiveddata = b"".join([receiveddata, receivedmessage])
 
@@ -105,13 +110,13 @@ class ThreadClient(threading.Thread):
         # Cas nouvel utilisateur
         if not exist:
             data[login + "@" + str(len(data))] = {
-                    "login": login,
-                    "password": password,
-                    "id": str(len(data)),
-                    "pseudo": login,
-                    "admin": True,
-                    "pub_key": pubkey
-                }
+                "login": login,
+                "password": password,
+                "id": str(len(data)),
+                "pseudo": login,
+                "admin": True,
+                "pub_key": pubkey
+            }
             with open("users.json", "w") as outfile:
                 json.dump(data, outfile)
             can_connect = True
