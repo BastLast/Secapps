@@ -12,8 +12,8 @@ def is_admin(user):
 def has_permission(file,user,permission):
     if is_owner(file,user):
         return True
-    if is_admin(user):
-        return permission=="list" or permission=="remove"
+    if is_admin(user) and permission in 'lr':
+        return True
     user_perm=file.get('permissions').get(user)
     if not user_perm:
         return False
