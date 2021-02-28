@@ -34,35 +34,35 @@ class ThreadClient(threading.Thread):
         return "Unrecognized command."
 
     def exec_command(self, data):
-        return {
-            'get': get,
-            'put': put,
-            'ls': ls,
-            'rm': rm,
-            'perm': perm
-        }.get(data.get('args')[0], self.nf)(data)
+        if data is None:
+            return "none"
+        else:
+            return {
+                'get': get,
+                'put': put,
+                'ls': ls,
+                'rm': rm,
+                'perm': perm
+            }.get(data.get('args')[0], self.nf)(data)
 
     def run(self):
         can_connect = self.logincheck()
         receiveddata = b""
         mergemessages = False
         while can_connect:
-            receivedmessage = self.connexion.recv(1024)
-
+            receivedmessage = self.decrypt(self.connexion.recv(1024)).decode('utf-8')
             # Test if the client was disconected
-            if receivedmessage.decode("utf-8") == '' or receivedmessage.upper().decode("utf-8") == "FIN":
+            if receivedmessage == '' or receivedmessage.upper() == "FIN":
                 break
 
-            if mergemessages and receivedmessage.decode("utf-8") != "FIN":
+            if mergemessages and receivedmessage != "FIN":
                 receiveddata = b"".join([receiveddata, receivedmessage])
 
-            if receivedmessage.decode("utf-8") == "DEBUT":
-                print("debut")
+            if receivedmessage == "DEBUT":
                 receiveddata = b""
                 mergemessages = True
 
-            if receivedmessage.decode("utf-8") == "FIN":
-                print("fin")
+            if receivedmessage == "FIN":
                 mergemessages = False
 
             if not mergemessages:
@@ -71,17 +71,7 @@ class ThreadClient(threading.Thread):
                 result = self.exec_command(loadeddata)
                 self.connexion.send(result.encode('utf-8'))
 
-            # A tester : Recupère la clé privé du serv et dechiffre ce qui est recu
-            # file_in = open("encrypted_data.bin", "rb")
-            # private_key = RSA.import_key(open("prvkeyserv.pem").read())
-            # enc_session_key, nonce, tag, ciphertext = \
-            #     [file_in.read(x) for x in (private_key.size_in_bytes(), 16, 16, -1)]
-            # cipher_rsa = PKCS1_OAEP.new(private_key)
-            # session_key = cipher_rsa.decrypt(enc_session_key)
-            # cipher_aes = AES.new(session_key, AES.MODE_EAX, nonce)
-            # data = cipher_aes.decrypt_and_verify(ciphertext, tag)
-            # print(data.decode("utf-8"))
-            # print(self.exec_command(loadeddata))
+
 
         # Fermeture de la connexion :
         self.connexion.close()  # couper la connexion côté serveur
@@ -90,6 +80,21 @@ class ThreadClient(threading.Thread):
             del conn_client[name]  # supprimer son entrée dans le dictionnaire
         print("Client %s déconnecté." % name)
         # Le thread se termine ici
+
+    # A tester quand server pourra envoyer à client.
+    def encrypt(self, data, nameid):
+        with open("users.json", "r") as publicclient:
+            public_key = RSA.import_key(json.load(publicclient)[nameid].get("pub_key").encode('utf-8'))
+            enc_data = PKCS1_OAEP.new(public_key).encrypt(data)
+        return enc_data
+
+    def decrypt(self, data):
+        with open('prvkeyserv.pem','r') as f:
+	        priv = f.read()
+	        f.close()
+        private_key = RSA.import_key(priv)
+        dec_data = PKCS1_OAEP.new(private_key).decrypt(data)
+        return dec_data
 
     def logincheck(self):
         self.connexion.send("Entrez votre login : ".encode('utf-8'))  # Demande login
