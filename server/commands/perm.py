@@ -86,7 +86,3 @@ def perm(data, user):
                 return "Error: You can't change a permission you don't have."
 
     return setPermission(args[1], addrem, args[3], args[4])
-
-
-
-    return data.get('args')[0]
