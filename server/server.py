@@ -34,17 +34,17 @@ class ThreadClient(threading.Thread):
     def nf(self, args):
         return "Unrecognized command."
 
-    def exec_command(self, data):
+    def exec_command(self, data, login):
         return {
             'get': get,
             'put': put,
             'ls': ls,
             'rm': rm,
             'perm': perm
-        }.get(data.get('args')[0], self.nf)(data)
+        }.get(data.get('args')[0], self.nf)(data, login)
 
     def run(self):
-        can_connect = self.logincheck()
+        can_connect, login = self.logincheck()
         receiveddata = b""
         mergemessages = False
         while can_connect:
@@ -69,7 +69,7 @@ class ThreadClient(threading.Thread):
             if not mergemessages:
                 # traitement de la commande
                 loadeddata = yaml.safe_load(receiveddata)
-                result = self.exec_command(loadeddata)
+                result = self.exec_command(loadeddata, login)
                 self.connexion.send(result.encode('utf-8'))
 
         # Fermeture de la connexion :
@@ -137,7 +137,7 @@ class ThreadClient(threading.Thread):
                 self.connexion.send("Connexion échouée".encode('utf-8'))
                 print('Connexion échouée : ')
                 can_connect = False
-        return can_connect
+        return can_connect, login + "@" + user.get("id")
 
 
 # Initialisation du serveur - Mise en place du socket :
