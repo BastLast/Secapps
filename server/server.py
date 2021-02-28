@@ -48,8 +48,7 @@ class ThreadClient(threading.Thread):
         receiveddata = b""
         mergemessages = False
         while can_connect:
-            #receivedmessage = self.decrypt(self.connexion.recv(128))
-            receivedmessage = self.connexion.recv(128)
+            receivedmessage = self.decrypt(self.connexion.recv(256))
 
             # Test if the client was disconected
             if receivedmessage.decode("utf-8") == '' or receivedmessage.upper().decode("utf-8") == "FIN":
@@ -71,7 +70,8 @@ class ThreadClient(threading.Thread):
                 # traitement de la commande
                 loadeddata = yaml.safe_load(receiveddata)
                 result = self.exec_command(loadeddata, login)
-                self.connexion.send(result.encode('utf-8'))
+                #self.connexion.send(self.encrypt(result.encode('utf-8'), login))
+                self.connexion.send(result.encode('utf-8'), login)
 
         # Fermeture de la connexion :
         self.connexion.close()  # couper la connexion côté serveur
@@ -85,13 +85,12 @@ class ThreadClient(threading.Thread):
         with open("users.json", "r") as publicclient:
             public_key = RSA.import_key(json.load(publicclient)[nameid].get("pub_key").encode('utf-8'))
         ciphertext = PKCS1_OAEP.new(public_key).encrypt(cleartext)
-        return base64.b64encode(ciphertext)
+        return ciphertext
 
     def decrypt(self, cryptedtext):
-        decoded_data = base64.b64decode(cryptedtext)
         private_key = RSA.import_key(open('prvkeyserv.pem').read(), passphrase=secret_code)
         # https://pycryptodome-master.readthedocs.io/en/latest/src/cipher/oaep.html
-        decrypted = PKCS1_OAEP.new(private_key).decrypt(decoded_data)
+        decrypted = PKCS1_OAEP.new(private_key).decrypt(cryptedtext)
         return decrypted
 
     def logincheck(self):
@@ -127,6 +126,7 @@ class ThreadClient(threading.Thread):
                 "admin": True,
                 "pub_key": pubkey
             }
+            pseudo_id = login + "@" + newid
             # Crée le dossier
             os.makedirs("./files/"+login + "@" + newid, exist_ok=True)
             # Crée le fichier .directory.json
