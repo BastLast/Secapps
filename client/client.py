@@ -66,7 +66,6 @@ class ThreadEmission(threading.Thread):
     def nf(self, args):
         return "Unrecognized command."
 
-
     def exec_command(self, args):
         if args is None:
             return "none"
@@ -85,26 +84,19 @@ class ThreadEmission(threading.Thread):
     def run(self):
         while 1:
             result = self.exec_command(self.parseargs(input()))
-            if result == "none":
-                self.connexion.send("FIN".encode('utf-8'))
-            else:
-                #self.connexion.send(self.encrypt("DEBUT".encode('utf-8')))
-                self.connexion.send("DEBUT".encode('utf-8'))
-                f = open("server_instruction", 'wb')
-                f.write(result)
-                f.close()
-                f = open("server_instruction", 'rb')
-                senddata = f.read(128)
-                self.encrypt(senddata)
-                while senddata:
-                    self.connexion.send(senddata)
-                    senddata = f.read(128)
-                    # print(senddata)
-                sleep(1)
-                #self.connexion.send(self.encrypt("FIN".encode('utf-8')))
-                self.connexion.send("FIN".encode('utf-8'))
-                f.close()
-            
+            self.connexion.send("DEBUT".encode("utf-8"))
+            f = open("server_instruction", 'wb')
+            f.write(result)
+            f.close()
+            f = open("server_instruction", 'rb')
+            senddata = f.read(1024)
+            while senddata:
+                self.connexion.send(senddata)
+                senddata = f.read(1024)
+                print(senddata)
+            sleep(1)
+            self.connexion.send("EOF".encode("utf-8"))
+            f.close()
 
     def encrypt(self, cleartext):
         with open("publicclient.json", "r") as publicclient:

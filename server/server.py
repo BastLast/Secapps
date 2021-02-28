@@ -57,14 +57,15 @@ class ThreadClient(threading.Thread):
             if receivedmessage == '' or receivedmessage.upper() == "FIN":
                 break
 
-            if mergemessages and receivedmessage != "FIN":
+            if mergemessages and receivedmessage.decode("utf-8") != "EOF":
                 receiveddata = b"".join([receiveddata, receivedmessage])
 
             if receivedmessage == "DEBUT":
                 receiveddata = b""
                 mergemessages = True
 
-            if receivedmessage == "FIN":
+            if receivedmessage.decode("utf-8") == "EOF":
+                print("fin")
                 mergemessages = False
 
             if not mergemessages:
