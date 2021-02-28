@@ -24,3 +24,5 @@ client/commands/__pycache__/
 
 server/classes/__pycache__/
 /client/server_instruction
+
+client/publicclient.json
