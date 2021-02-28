@@ -1,12 +1,8 @@
 import base64
 import json
-import os.path
 from os import path
 
 from commands.utils import has_permission
-from commands.utils import is_owner
-from commands.utils import is_admin
-
 
 def put(data, login):
     parent = login
@@ -32,14 +28,7 @@ def put(data, login):
         "owner": login,
         "permissions": defaultpermissions
     }
-    print(file)
     with open("files/" + parent + "/" + data.get('file_name') + ".json", "w") as outfile:
         json.dump(file, outfile)
 
-    with open("files/" + parent + "/" + data.get('file_name') + ".json", "r") as outfile:
-        datade = json.load(outfile)
-
-    f = open("files/" + parent + "/" + data.get('file_name'), 'wb')
-    f.write(base64.b64decode(datade.get("content").encode()))
-    f.close()
     return "fichier recu et enregistré"

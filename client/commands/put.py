@@ -20,8 +20,4 @@ def put(args):
         print("Le fichier n'a pas été trouvé")
         return "error"
 
-
-
-    # faire le chiffrement du message ici :
-
     return server_instruction
