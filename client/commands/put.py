@@ -1,5 +1,5 @@
 import yaml
-
+import os
 
 def put(args):
     server_instruction = ""
@@ -8,7 +8,7 @@ def put(args):
             data = {
                 'args': args,
                 'serialized_file': stream.read(),
-                'file_name': stream.name
+                'file_name': os.path.basename(stream.name)
             }
             server_instruction = yaml.safe_dump(data).encode("utf-8")
 
