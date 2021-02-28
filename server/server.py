@@ -2,9 +2,8 @@
 # Utilise les threads pour gérer les connexions clientes en parallèle.
 import os
 
+from Crypto.Cipher import PKCS1_OAEP, AES
 from Crypto.PublicKey import RSA
-from Crypto.Cipher import PKCS1_OAEP
-import base64
 
 from classes.log import Log
 
@@ -35,32 +34,30 @@ class ThreadClient(threading.Thread):
         return "Unrecognized command."
 
     def exec_command(self, data):
-        if data is None:
-            return "none"
-        else:
-            return {
-                'get': get,
-                'put': put,
-                'ls': ls,
-                'rm': rm,
-                'perm': perm
-            }.get(data.get('args')[0], self.nf)(data)
+        return {
+            'get': get,
+            'put': put,
+            'ls': ls,
+            'rm': rm,
+            'perm': perm
+        }.get(data.get('args')[0], self.nf)(data)
 
     def run(self):
         can_connect = self.logincheck()
         receiveddata = b""
         mergemessages = False
         while can_connect:
-            #receivedmessage = self.decrypt(self.connexion.recv(128)).decode('utf-8')
-            receivedmessage = self.connexion.recv(128)
+            receivedmessage = self.connexion.recv(1024)
+
             # Test if the client was disconected
-            if receivedmessage == '' or receivedmessage.upper() == "FIN":
+            if receivedmessage.decode("utf-8") == '' or receivedmessage.upper().decode("utf-8") == "FIN":
                 break
 
             if mergemessages and receivedmessage.decode("utf-8") != "EOF":
                 receiveddata = b"".join([receiveddata, receivedmessage])
 
-            if receivedmessage == "DEBUT":
+            if receivedmessage.decode("utf-8") == "DEBUT":
+                print("debut")
                 receiveddata = b""
                 mergemessages = True
 
@@ -74,6 +71,18 @@ class ThreadClient(threading.Thread):
                 result = self.exec_command(loadeddata)
                 self.connexion.send(result.encode('utf-8'))
 
+            # A tester : Recupère la clé privé du serv et dechiffre ce qui est recu
+            # file_in = open("encrypted_data.bin", "rb")
+            # private_key = RSA.import_key(open("prvkeyserv.pem").read())
+            # enc_session_key, nonce, tag, ciphertext = \
+            #     [file_in.read(x) for x in (private_key.size_in_bytes(), 16, 16, -1)]
+            # cipher_rsa = PKCS1_OAEP.new(private_key)
+            # session_key = cipher_rsa.decrypt(enc_session_key)
+            # cipher_aes = AES.new(session_key, AES.MODE_EAX, nonce)
+            # data = cipher_aes.decrypt_and_verify(ciphertext, tag)
+            # print(data.decode("utf-8"))
+            # print(self.exec_command(loadeddata))
+
         # Fermeture de la connexion :
         self.connexion.close()  # couper la connexion côté serveur
         name = self.getName()
@@ -81,20 +90,6 @@ class ThreadClient(threading.Thread):
             del conn_client[name]  # supprimer son entrée dans le dictionnaire
         print("Client %s déconnecté." % name)
         # Le thread se termine ici
-
-    # A tester quand server pourra envoyer à client.
-    def encrypt(self, cleartext, nameid):
-        with open("users.json", "r") as publicclient:
-            public_key = RSA.import_key(json.load(publicclient)[nameid].get("pub_key").encode('utf-8'))
-        ciphertext = PKCS1_OAEP.new(public_key).encrypt(cleartext)
-        return base64.b64encode(ciphertext)
-
-    def decrypt(self, cryptedtext):
-        decoded_data = base64.b64decode(cryptedtext)
-        private_key = RSA.import_key(open('prvkeyserv.pem').read(), passphrase=secret_code)
-        # https://pycryptodome-master.readthedocs.io/en/latest/src/cipher/oaep.html
-        decrypted = PKCS1_OAEP.new(private_key).decrypt(decoded_data)
-        return decrypted
 
     def logincheck(self):
         self.connexion.send("Entrez votre login : ".encode('utf-8'))  # Demande login
