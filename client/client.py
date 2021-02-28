@@ -85,6 +85,7 @@ class ThreadEmission(threading.Thread):
         while 1:
             result = self.exec_command(self.parseargs(input()))
             if result != "error":
+                print("Début de la transmission")
                 self.connexion.send(self.encrypt("DEBUT".encode("utf-8")))
                 f = open("server_instruction", 'wb')
                 f.write(result)
@@ -94,7 +95,6 @@ class ThreadEmission(threading.Thread):
                 while senddata:
                     self.connexion.send(self.encrypt(senddata))
                     senddata = f.read(128)
-                    print(senddata)
                 sleep(1)
                 self.connexion.send(self.encrypt("EOF".encode("utf-8")))
                 f.close()
