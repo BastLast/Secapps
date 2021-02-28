@@ -2,9 +2,8 @@ import json
 import os
 from commands.utils import has_permission
 
-def rm(data):
+def rm(data,user):
     args = data.get('args')
-    user = data.get('user')
 
     if len(args) != 2:
         return "Error: Incorrect syntax.\nUsage: rm <file>"

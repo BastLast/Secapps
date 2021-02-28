@@ -35,7 +35,7 @@ def get_files_from_parent(parent, user):
     return show_files
 
 
-def ls(data):
+def ls(data,user):
     args = data.get('args')
     user = data.get('user')
 
