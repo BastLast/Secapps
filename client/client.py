@@ -34,7 +34,7 @@ class ThreadReception(threading.Thread):
     def run(self):
         while 1:
             message_recu = self.connexion.recv(1024).decode("utf-8")
-            print("*" + message_recu + "*")
+            print(message_recu)
             if message_recu == '' or message_recu.upper() == "FIN":
                 break
         # th_E._stop()
@@ -104,12 +104,13 @@ class ThreadEmission(threading.Thread):
         ciphertext = PKCS1_OAEP.new(public_key).encrypt(cleartext)
         return ciphertext
 
-    #A tester quand server pourra envoyer des commandes à client.
+    # A tester quand server pourra envoyer des commandes à client.
     def decrypt(self, cryptedtext, login):
         with open("privateclient.json", "r") as privateclient:
             private_key = RSA.import_key(json.load(privateclient)[login].encode('utf-8'), passphrase=secret_code)
         decrypted = PKCS1_OAEP.new(private_key).decrypt(cryptedtext)
         return decrypted
+
 
 # Programme principal - Établissement de la connexion :
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

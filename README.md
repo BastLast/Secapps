@@ -289,8 +289,9 @@ Liste des commandes disponibles pour tous les utilisateurs, s’ils disposent de
 
 
 
-*   _ls_ : Lister les fichiers envoyés par l’utilisateur
-*   _ls &lt;user>_ : Lister les fichiers partagés d’un autre utilisateur
+*   _ls_ : Lister les fichiers dans le dossier de l'utilisateur et les permissions associées pour celui-ci
+*   _ls &lt;user>_ : Lister les fichiers du dossier d'un autre utilisateur et le permissions pour l'utilisateur courant
+*   _ls &lt;filename>_ : Lister le fichier et les permissions associées pour l'utilisateur courant
 *   _put_ _&lt;filename>_ : Envoyer un fichier
     *   _filename_ : nom du fichier
 *   _put_ _&lt;user> &lt;filename>_ : Envoyer un fichier dans le dossier d’un autre utilisateur
@@ -300,10 +301,7 @@ Liste des commandes disponibles pour tous les utilisateurs, s’ils disposent de
 *   _get &lt;user> &lt;filename>_ :Télécharger le fichier d’un autre utilisateur
     *   _user_ : nom de l’utilisateur propriétaire du fichier
     *   _filename_ : nom du fichier
-*   _rm &lt;filename>_ : Supprimer un fichier de son répertoire
-    *   _filename_ : nom du fichier
-*   _rm &lt;user> &lt;filename>_ : Supprimer un fichier du répertoire d’un autre utilisateur
-    *   _user_ : nom de l’utilisateur propriétaire du fichier
+*   _rm &lt;filepath>_ : Supprimer un fichier de son répertoire
     *   _filename_ : nom du fichier
 *   _perm &lt;user> &lt;add|remove> &lt;c|l|d|r|o> &lt;directory|filename>_ : modifier les permissions sur un fichier ou un dossier pour un utilisateur. 
     *   _user_ : nom de l’utilisateur à qui modifier les permissions
