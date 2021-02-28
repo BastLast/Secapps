@@ -37,7 +37,6 @@ def get_files_from_parent(parent, user):
 
 def ls(data,user):
     args = data.get('args')
-    user = data.get('user')
 
     if len(args) > 2:
         return "Error: Incorrect syntax.\nUsage: ls [directory|file]"
