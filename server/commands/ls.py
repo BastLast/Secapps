@@ -1,4 +1,5 @@
 import json
+import os
 from commands.utils import has_permission
 from commands.utils import is_owner
 from commands.utils import is_admin
@@ -16,21 +17,25 @@ def file_to_string(filename, fileproperties, user):
             txt += pname
         else:
             txt += "-"
-    return txt + " | " + filename
+    if ".directory.json" in filename:
+        return txt + " | ./"
+    return txt + " | " + filename.split("/")[1]
 
 
-def get_files_from_parent(files, parent, user):
+def get_files_from_parent(parent, user):
     show_files = ""
-    for filename, fileproperties in files.items():
-        if fileproperties.get('parent') == parent and (
-                has_permission(fileproperties, user, "l") or has_permission(files.get(parent), user, "l")):
+    with open("files/" + parent + "/.directory.json") as pfile:
+        parentproperties = json.load(pfile)
+    for filename in os.listdir("files/" + parent):
+        fn = parent + "/" + filename
+        with open("files/" + fn) as file:
+            fileproperties = json.load(file);
+        if has_permission(fileproperties, user, "l") or has_permission(parentproperties, user, "l"):
             show_files += file_to_string(filename, fileproperties, user) + "\n"
     return show_files
 
 
 def ls(data):
-    with open("files/files.json", "r") as read_files:
-        files = json.load(read_files)
     args = data.get('args')
     user = data.get('user')
 
@@ -38,16 +43,27 @@ def ls(data):
         return "Error: Incorrect syntax.\nUsage: ls [directory|file]"
 
     if len(args) == 1:
-        return get_files_from_parent(files, user, user)
+        return get_files_from_parent(user, user)
 
-    f = files.get(args[1])
-    if not f:
+    with open("users.json", "r") as users_file:
+        users = json.load(users_file)
+
+    if ".directory.json" in args[1]:
+        return "Error: No such file or directory."
+
+    if users.get(args[1]):
+        return get_files_from_parent(args[1], user)
+
+    if "/" not in args[1]:
+        args[1] = user + "/" + args[1]
+
+    if not os.path.exists("files/" + args[1]):
         return "Error: Error: No such file or directory."
 
-    if f.get('parent') == "":
-        return get_files_from_parent(files, f.get('parent'), user)
+    with open("files/" + args[1]) as file:
+        fileproperties = json.load(file)
 
-    if has_permission(f, user, "l"):
-        return file_to_string(args[1], f, user)
+    if has_permission(fileproperties, user, "l"):
+        return file_to_string(args[1], fileproperties, user)
 
     return "Error: Permission denied."
