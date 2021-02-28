@@ -34,7 +34,7 @@ class ThreadReception(threading.Thread):
     def run(self):
         while 1:
             message_recu = self.connexion.recv(1024).decode("utf-8")
-            print("*" + message_recu + "*")
+            print(message_recu)
             if message_recu == '' or message_recu.upper() == "FIN":
                 break
         # th_E._stop()
@@ -84,37 +84,39 @@ class ThreadEmission(threading.Thread):
     def run(self):
         while 1:
             result = self.exec_command(self.parseargs(input()))
-            self.connexion.send("DEBUT".encode("utf-8"))
-            #self.connexion.send(self.encrypt("DEBUT".encode("utf-8")))
-            f = open("server_instruction", 'wb')
-            f.write(result)
-            f.close()
-            f = open("server_instruction", 'rb')
-            senddata = f.read(128)
-            while senddata:
-                self.connexion.send(senddata)
-                #self.connexion.send(self.encrypt(senddata))
+            if result != "error":
+                self.connexion.send("DEBUT".encode("utf-8"))
+                # self.connexion.send(self.encrypt("DEBUT".encode("utf-8")))
+                f = open("server_instruction", 'wb')
+                f.write(result)
+                f.close()
+                f = open("server_instruction", 'rb')
+                print("Fichier trouvé, début de transmission...")
                 senddata = f.read(128)
-                print(senddata)
-            sleep(1)
-            self.connexion.send("EOF".encode("utf-8"))
-            #self.connexion.send(self.encrypt("EOF".encode("utf-8")))
-            f.close()
+                while senddata:
+                    self.connexion.send(senddata)
+                    # self.connexion.send(self.encrypt(senddata))
+                    senddata = f.read(128)
+                sleep(1)
+                self.connexion.send("EOF".encode("utf-8"))
+                # self.connexion.send(self.encrypt("EOF".encode("utf-8")))
+                f.close()
 
     def encrypt(self, cleartext):
         with open("publicclient.json", "r") as publicclient:
             public_key = RSA.import_key(json.load(publicclient)["server"].encode('utf-8'))
-        #ciphertext = PKCS1_OAEP.new(public_key).encrypt(b"test")
+        # ciphertext = PKCS1_OAEP.new(public_key).encrypt(b"test")
         ciphertext = PKCS1_OAEP.new(public_key).encrypt(cleartext)
         return base64.b64encode(ciphertext)
 
-    #A tester quand server pourra envoyer des commandes à client.
+    # A tester quand server pourra envoyer des commandes à client.
     def decrypt(self, cryptedtext, login):
         with open("privateclient.json", "r") as privateclient:
             private_key = RSA.import_key(json.load(privateclient)[login].encode('utf-8'), passphrase=secret_code)
         decoded_data = base64.b64decode(cryptedtext)
         decrypted = PKCS1_OAEP.new(private_key).decrypt(decoded_data)
         return decrypted
+
 
 # Programme principal - Établissement de la connexion :
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
