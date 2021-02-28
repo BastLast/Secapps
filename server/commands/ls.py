@@ -24,7 +24,7 @@ def file_to_string(filename, fileproperties, user):
             txt += "-"
     if ".directory.json" in filename:
         return txt + " | ./"
-    return txt + " | " + filename.split("/")[1]
+    return txt + " | " + filename
 
 
 def get_files_from_parent(parent, user):
