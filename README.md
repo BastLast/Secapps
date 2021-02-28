@@ -269,13 +269,17 @@ Probabilité d'occurrence
 
 ## Document d’installation
 
-Récupérer les dossiers
+Récupérer les client et serveur
+
+Eventuellement régler l'ip HOST et le port PORT dans server.py et client.py
 
 Ouvrir un terminal
 
-Lancer le serveur en tâche de fond
+Installer les modules de chiffrement : pip install pycryptodome
 
-Lancer le client
+Lancer le serveur en tâche de fond : py server.py 
+
+Lancer le client : py client.py
 
 ## Document d’utilisation
 
