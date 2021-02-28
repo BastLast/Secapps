@@ -6,9 +6,14 @@ from commands.utils import is_admin
 
 
 def file_to_string(filename, fileproperties, user):
+
     if is_owner(fileproperties, user):
-        return "cldro " + filename
+        if ".directory.json" in filename:
+            return "cldro | ./"
+        return "cldro | " + filename
     if is_admin(user):
+        if ".directory.json" in filename:
+            return "-l-r- | ./"
         return "-l-r- | " + filename
     txt = ""
     permissions = fileproperties.get("permissions").get(user)
@@ -31,7 +36,8 @@ def get_files_from_parent(parent, user):
         with open("files/" + fn) as file:
             fileproperties = json.load(file);
         if has_permission(fileproperties, user, "l") or has_permission(parentproperties, user, "l"):
-            show_files += file_to_string(filename, fileproperties, user) + "\n"
+            fileperm=file_to_string(filename, fileproperties, user)
+            show_files += fileperm + "\n"
     return show_files
 
 
