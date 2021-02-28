@@ -119,6 +119,15 @@ class ThreadClient(threading.Thread):
                 "admin": True,
                 "pub_key": pubkey
             }
+            # Crée le dossier
+            os.makedirs("./files/"+login + "@" + str(len(data)), exist_ok=True)
+            # Crée le fichier .directory.json
+            with open("./files/"+login + "@" + str(len(data)) + "/.directory.json", "w") as f:
+                data1 = {
+                    "owner": login + "@" + str(len(data)),
+                    "permissions": {}
+                }
+                json.dump(data1, f)
             with open("users.json", "w") as outfile:
                 json.dump(data, outfile)
             can_connect = True
