@@ -71,7 +71,7 @@ class ThreadClient(threading.Thread):
                 loadeddata = yaml.safe_load(receiveddata)
                 result = self.exec_command(loadeddata, login)
                 #self.connexion.send(self.encrypt(result.encode('utf-8'), login))
-                self.connexion.send(result.encode('utf-8'), login)
+                self.connexion.send(result.encode('utf-8'))
 
         # Fermeture de la connexion :
         self.connexion.close()  # couper la connexion côté serveur
