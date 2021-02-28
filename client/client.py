@@ -128,6 +128,10 @@ try:
     password = hashlib.pbkdf2_hmac('sha256', input(response.decode('utf-8')).encode('utf-8'), salt, 100000).hex()
     client_socket.send(password.encode('utf-8'))  # Envoie password
     response = client_socket.recv(2048)  # Demande pubkey par serveur
+    if not os.path.isfile("privateclient.json"):
+        open("privateclient.json", "w").close
+    if not os.path.isfile("publicclient.json"):
+        open("publicclient.json", "w").close
     if response.decode('utf-8') == "pubkey":
         if os.path.getsize("privateclient.json") > 0 and os.path.getsize("publicclient.json") > 0:
             with open("privateclient.json", "r") as privateclient:
