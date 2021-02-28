@@ -12,7 +12,7 @@ def is_admin(user):
 def has_permission(file,user,permission):
     if is_owner(file,user):
         return True
-    if is_admin(user) and permission in 'lr':
+    if is_admin(user) and permission == 'l':
         return True
     user_perm=file.get('permissions').get(user)
     if not user_perm:
