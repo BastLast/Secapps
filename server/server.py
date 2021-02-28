@@ -110,21 +110,22 @@ class ThreadClient(threading.Thread):
                     exist = True
                     pseudo_id = pseudoId
         # Cas nouvel utilisateur
+        newid = str(len(data))
         if not exist:
-            data[login + "@" + str(len(data))] = {
+            data[login + "@" + newid] = {
                 "login": login,
                 "password": password,
-                "id": str(len(data)),
+                "id": newid,
                 "pseudo": login,
                 "admin": True,
                 "pub_key": pubkey
             }
             # Crée le dossier
-            os.makedirs("./files/"+login + "@" + str(len(data)), exist_ok=True)
+            os.makedirs("./files/"+login + "@" + newid, exist_ok=True)
             # Crée le fichier .directory.json
-            with open("./files/"+login + "@" + str(len(data)) + "/.directory.json", "w") as f:
+            with open("./files/"+login + "@" + newid + "/.directory.json", "w") as f:
                 data1 = {
-                    "owner": login + "@" + str(len(data)),
+                    "owner": login + "@" + newid,
                     "permissions": {}
                 }
                 json.dump(data1, f)
