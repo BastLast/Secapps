@@ -34,7 +34,7 @@ class ThreadReception(threading.Thread):
     def run(self):
         while 1:
             message_recu = self.connexion.recv(1024).decode("utf-8")
-            print("*" + message_recu + "*")
+            print(message_recu)
             if message_recu == '' or message_recu.upper() == "FIN":
                 break
         # th_E._stop()
