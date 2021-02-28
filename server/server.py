@@ -2,8 +2,9 @@
 # Utilise les threads pour gérer les connexions clientes en parallèle.
 import os
 
-from Crypto.Cipher import PKCS1_OAEP, AES
 from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_OAEP
+import base64
 
 from classes.log import Log
 
@@ -50,7 +51,8 @@ class ThreadClient(threading.Thread):
         receiveddata = b""
         mergemessages = False
         while can_connect:
-            receivedmessage = self.decrypt(self.connexion.recv(1024)).decode('utf-8')
+            #receivedmessage = self.decrypt(self.connexion.recv(128)).decode('utf-8')
+            receivedmessage = self.connexion.recv(128)
             # Test if the client was disconected
             if receivedmessage == '' or receivedmessage.upper() == "FIN":
                 break
@@ -71,8 +73,6 @@ class ThreadClient(threading.Thread):
                 result = self.exec_command(loadeddata)
                 self.connexion.send(result.encode('utf-8'))
 
-
-
         # Fermeture de la connexion :
         self.connexion.close()  # couper la connexion côté serveur
         name = self.getName()
@@ -82,19 +82,18 @@ class ThreadClient(threading.Thread):
         # Le thread se termine ici
 
     # A tester quand server pourra envoyer à client.
-    def encrypt(self, data, nameid):
+    def encrypt(self, cleartext, nameid):
         with open("users.json", "r") as publicclient:
             public_key = RSA.import_key(json.load(publicclient)[nameid].get("pub_key").encode('utf-8'))
-            enc_data = PKCS1_OAEP.new(public_key).encrypt(data)
-        return enc_data
+        ciphertext = PKCS1_OAEP.new(public_key).encrypt(cleartext)
+        return base64.b64encode(ciphertext)
 
-    def decrypt(self, data):
-        with open('prvkeyserv.pem','r') as f:
-	        priv = f.read()
-	        f.close()
-        private_key = RSA.import_key(priv)
-        dec_data = PKCS1_OAEP.new(private_key).decrypt(data)
-        return dec_data
+    def decrypt(self, cryptedtext):
+        decoded_data = base64.b64decode(cryptedtext)
+        private_key = RSA.import_key(open('prvkeyserv.pem').read(), passphrase=secret_code)
+        # https://pycryptodome-master.readthedocs.io/en/latest/src/cipher/oaep.html
+        decrypted = PKCS1_OAEP.new(private_key).decrypt(decoded_data)
+        return decrypted
 
     def logincheck(self):
         self.connexion.send("Entrez votre login : ".encode('utf-8'))  # Demande login

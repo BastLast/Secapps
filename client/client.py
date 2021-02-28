@@ -11,13 +11,14 @@ from time import sleep
 import yaml
 from Crypto.Cipher import PKCS1_OAEP, AES
 from Crypto.Random import get_random_bytes
+from Crypto.PublicKey import RSA
+import base64
 
 from commands.get import get
 from commands.put import put
 from commands.ls import ls
 from commands.perm import perm
 from commands.rm import rm
-from Crypto.PublicKey import RSA
 
 host = '127.0.0.1'
 port = 40000
@@ -84,34 +85,41 @@ class ThreadEmission(threading.Thread):
     def run(self):
         while 1:
             result = self.exec_command(self.parseargs(input()))
-            self.connexion.send(self.encrypt("DEBUT"))
-            f = open("server_instruction", 'wb')
-            f.write(result)
-            f.close()
-            f = open("server_instruction", 'rb')
-            senddata = f.read(1024)
-            self.encrypt(senddata)
-            while senddata:
-                self.connexion.send(senddata)
-                senddata = f.read(1024)
-                # print(senddata)
-            sleep(1)
-            self.connexion.send(self.encrypt("FIN"))
-            f.close()
+            if result == "none":
+                self.connexion.send("FIN".encode('utf-8'))
+            else:
+                #self.connexion.send(self.encrypt("DEBUT".encode('utf-8')))
+                self.connexion.send("DEBUT".encode('utf-8'))
+                f = open("server_instruction", 'wb')
+                f.write(result)
+                f.close()
+                f = open("server_instruction", 'rb')
+                senddata = f.read(128)
+                self.encrypt(senddata)
+                while senddata:
+                    self.connexion.send(senddata)
+                    senddata = f.read(128)
+                    # print(senddata)
+                sleep(1)
+                #self.connexion.send(self.encrypt("FIN".encode('utf-8')))
+                self.connexion.send("FIN".encode('utf-8'))
+                f.close()
             
 
-    def encrypt(self, data):
+    def encrypt(self, cleartext):
         with open("publicclient.json", "r") as publicclient:
             public_key = RSA.import_key(json.load(publicclient)["server"].encode('utf-8'))
-            enc_data = PKCS1_OAEP.new(public_key).encrypt(data)
-        return enc_data
+        #ciphertext = PKCS1_OAEP.new(public_key).encrypt(b"test")
+        ciphertext = PKCS1_OAEP.new(public_key).encrypt(cleartext)
+        return base64.b64encode(ciphertext)
 
     #A tester quand server pourra envoyer des commandes à client.
-    def decrypt(self, data, login):
+    def decrypt(self, cryptedtext, login):
         with open("privateclient.json", "r") as privateclient:
             private_key = RSA.import_key(json.load(privateclient)[login].encode('utf-8'), passphrase=secret_code)
-            dec_data = PKCS1_OAEP.new(private_key).decrypt(data)
-        return dec_data
+        decoded_data = base64.b64decode(cryptedtext)
+        decrypted = PKCS1_OAEP.new(private_key).decrypt(decoded_data)
+        return decrypted
 
 # Programme principal - Établissement de la connexion :
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
