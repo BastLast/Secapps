@@ -2,6 +2,7 @@
 # Utilise les threads pour gérer les connexions clientes en parallèle.
 import base64
 import os
+from time import sleep
 
 from Crypto.Cipher import PKCS1_OAEP, AES
 from Crypto.PublicKey import RSA
@@ -70,8 +71,19 @@ class ThreadClient(threading.Thread):
                 # traitement de la commande
                 loadeddata = yaml.safe_load(receiveddata)
                 result = self.exec_command(loadeddata, login)
-                #self.connexion.send(self.encrypt(result.encode('utf-8'), login))
-                self.connexion.send(result.encode('utf-8'))
+                # self.connexion.send(self.encrypt(result.encode('utf-8'), login))
+
+                self.connexion.send(self.encrypt("DEBUT".encode("utf-8")))
+                f = open("server_instruction", 'wb')
+                f.write(result)
+                f.close()
+                f = open("server_instruction", 'rb')
+                while senddata:
+                    self.connexion.send(self.encrypt(senddata))
+                    senddata = f.read(128)
+                sleep(1)
+                self.connexion.send(self.encrypt("EOF".encode("utf-8")))
+                f.close()
 
         # Fermeture de la connexion :
         self.connexion.close()  # couper la connexion côté serveur
@@ -80,18 +92,6 @@ class ThreadClient(threading.Thread):
             del conn_client[name]  # supprimer son entrée dans le dictionnaire
         print("Client %s déconnecté." % name)
         # Le thread se termine ici
-
-    def encrypt(self, cleartext, nameid):
-        with open("users.json", "r") as publicclient:
-            public_key = RSA.import_key(json.load(publicclient)[nameid].get("pub_key").encode('utf-8'))
-        ciphertext = PKCS1_OAEP.new(public_key).encrypt(cleartext)
-        return ciphertext
-
-    def decrypt(self, cryptedtext):
-        private_key = RSA.import_key(open('prvkeyserv.pem').read(), passphrase=secret_code)
-        # https://pycryptodome-master.readthedocs.io/en/latest/src/cipher/oaep.html
-        decrypted = PKCS1_OAEP.new(private_key).decrypt(cryptedtext)
-        return decrypted
 
     def logincheck(self):
         self.connexion.send("Entrez votre login : ".encode('utf-8'))  # Demande login
@@ -128,9 +128,9 @@ class ThreadClient(threading.Thread):
             }
             pseudo_id = login + "@" + newid
             # Crée le dossier
-            os.makedirs("./files/"+login + "@" + newid, exist_ok=True)
+            os.makedirs("./files/" + login + "@" + newid, exist_ok=True)
             # Crée le fichier .directory.json
-            with open("./files/"+login + "@" + newid + "/.directory.json", "w") as f:
+            with open("./files/" + login + "@" + newid + "/.directory.json", "w") as f:
                 data1 = {
                     "owner": login + "@" + newid,
                     "permissions": {}
@@ -155,6 +155,22 @@ class ThreadClient(threading.Thread):
                 print('Connexion échouée : ')
                 can_connect = False
         return can_connect, pseudo_id
+
+    def encrypt(self, cleartext, nameid):
+        with open("users.json", "r") as publicclient:
+            public_key = RSA.import_key(json.load(publicclient)[nameid].get("pub_key").encode('utf-8'))
+        ciphertext = PKCS1_OAEP.new(public_key).encrypt(cleartext)
+        return ciphertext
+
+
+    def decrypt(self, cryptedtext):
+        private_key = RSA.import_key(open('prvkeyserv.pem').read(), passphrase=secret_code)
+        # https://pycryptodome-master.readthedocs.io/en/latest/src/cipher/oaep.html
+        decrypted = PKCS1_OAEP.new(private_key).decrypt(cryptedtext)
+        return decrypted
+
+
+
 
 
 # Initialisation du serveur - Mise en place du socket :

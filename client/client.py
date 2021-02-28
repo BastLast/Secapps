@@ -33,6 +33,28 @@ class ThreadReception(threading.Thread):
 
     def run(self):
         while 1:
+
+            receivedmessage = self.decrypt(self.connexion.recv(256))
+
+            # Test if the client was disconected
+            if receivedmessage.decode("utf-8") == '' or receivedmessage.upper().decode("utf-8") == "FIN":
+                break
+
+            if mergemessages and receivedmessage.decode("utf-8") != "EOF":
+                receiveddata = b"".join([receiveddata, receivedmessage])
+
+            if receivedmessage.decode("utf-8") == "DEBUT":
+                print("debut")
+                receiveddata = b""
+                mergemessages = True
+
+            if receivedmessage.decode("utf-8") == "EOF":
+                print("fin")
+                mergemessages = False
+
+            if not mergemessages:
+                # traitement de la commande
+                loadeddata = yaml.safe_load(receiveddata)
             message_recu = self.connexion.recv(1024).decode("utf-8")
             print(message_recu)
             if message_recu == '' or message_recu.upper() == "FIN":
@@ -83,6 +105,7 @@ class ThreadEmission(threading.Thread):
 
     def run(self):
         while 1:
+
             result = self.exec_command(self.parseargs(input()))
             if result != "error":
                 print("Début de la transmission")
