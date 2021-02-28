@@ -48,7 +48,8 @@ class ThreadClient(threading.Thread):
         receiveddata = b""
         mergemessages = False
         while can_connect:
-            receivedmessage = self.connexion.recv(1024)
+            #receivedmessage = self.decrypt(self.connexion.recv(128))
+            receivedmessage = self.connexion.recv(128)
 
             # Test if the client was disconected
             if receivedmessage.decode("utf-8") == '' or receivedmessage.upper().decode("utf-8") == "FIN":
@@ -109,8 +110,14 @@ class ThreadClient(threading.Thread):
                 if login == user.get("login"):
                     exist = True
                     pseudo_id = pseudoId
-        # Cas nouvel utilisateur
-        newid = str(len(data))
+        else:
+            open("users.json", "w").close
+            data = {}
+            # Cas nouvel utilisateur
+        if not data:
+            newid = "0"
+        else:
+            newid = str(len(data))
         if not exist:
             data[login + "@" + newid] = {
                 "login": login,
