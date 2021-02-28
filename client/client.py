@@ -84,19 +84,20 @@ class ThreadEmission(threading.Thread):
     def run(self):
         while 1:
             result = self.exec_command(self.parseargs(input()))
-            self.connexion.send(self.encrypt("DEBUT".encode("utf-8")))
-            f = open("server_instruction", 'wb')
-            f.write(result)
-            f.close()
-            f = open("server_instruction", 'rb')
-            senddata = f.read(128)
-            while senddata:
-                self.connexion.send(self.encrypt(senddata))
+            if result != "error":
+                self.connexion.send(self.encrypt("DEBUT".encode("utf-8")))
+                f = open("server_instruction", 'wb')
+                f.write(result)
+                f.close()
+                f = open("server_instruction", 'rb')
                 senddata = f.read(128)
-                print(senddata)
-            sleep(1)
-            self.connexion.send(self.encrypt("EOF".encode("utf-8")))
-            f.close()
+                while senddata:
+                    self.connexion.send(self.encrypt(senddata))
+                    senddata = f.read(128)
+                    print(senddata)
+                sleep(1)
+                self.connexion.send(self.encrypt("EOF".encode("utf-8")))
+                f.close()
 
     def encrypt(self, cleartext):
         with open("publicclient.json", "r") as publicclient:
