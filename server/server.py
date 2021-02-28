@@ -147,7 +147,7 @@ class ThreadClient(threading.Thread):
                 self.connexion.send("Connexion échouée".encode('utf-8'))
                 print('Connexion échouée : ')
                 can_connect = False
-        return can_connect, user.get("pseudo") + "@" + user.get("id")
+        return can_connect, pseudo_id
 
 
 # Initialisation du serveur - Mise en place du socket :
