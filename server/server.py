@@ -124,7 +124,7 @@ class ThreadClient(threading.Thread):
                 "password": password,
                 "id": newid,
                 "pseudo": login,
-                "admin": True,
+                "admin": newid == "0",
                 "pub_key": pubkey
             }
             pseudo_id = login + "@" + newid
