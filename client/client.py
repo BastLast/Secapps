@@ -52,12 +52,10 @@ class ThreadReception(threading.Thread):
                 receiveddata = b"".join([receiveddata, receivedmessage])
 
             if receivedmessage.decode("utf-8") == "DEBUT":
-                print("debut")
                 receiveddata = b""
                 mergemessages = True
 
             if receivedmessage.decode("utf-8") == "EOF":
-                print("fin")
                 mergemessages = False
 
             if not mergemessages:
@@ -126,7 +124,7 @@ class ThreadEmission(threading.Thread):
 
             result = self.exec_command(self.parseargs(input()))
             if result != "error":
-                print("Début de la transmission")
+                print("Envoi de la commande au serveur...")
                 self.connexion.send(self.encrypt("DEBUT".encode("utf-8")))
                 f = open("server_instruction", 'wb')
                 f.write(result)
