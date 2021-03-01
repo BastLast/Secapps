@@ -14,6 +14,9 @@ def rm(data,user):
     if "/" not in args[1]:
         args[1] = user + "/" + args[1]
 
+    if "../" in args[1]:
+        return "Error: Error: No such file."
+
     if not os.path.exists("files/" + args[1]):
         return "Error: Error: No such file."
 

@@ -12,6 +12,10 @@ def get(data, login):
     # check permissions
     if len(data.get("args")) > 2:
         parent = data.get("args")[2]
+        if "../" in parent:
+            return "Erreur, le dossier cible n'existe pas"
+        if ".directory.json" in data.get("args")[1]:
+            return "Erreur, le dossier cible n'existe pas"
         if not path.exists("files/" + parent):
             return "Erreur, le dossier cible n'existe pas"
         with open("files/" + parent + "/.directory.json") as pfile:

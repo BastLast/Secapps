@@ -48,6 +48,9 @@ def perm(data, user):
         if p not in "cldro":
             return "Error: Invalid argument."
 
+    if "../" in args[4]:
+        return "Error: No such file or directory."
+
     if ".directory.json" in args[4]:
         return "Error: No such file or directory."
 

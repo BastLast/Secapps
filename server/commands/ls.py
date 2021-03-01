@@ -51,6 +51,9 @@ def ls(data,user):
     if len(args) == 1:
         return get_files_from_parent(user, user)
 
+    if "../" in args[1]:
+        return "Error: Error: No such file or directory."
+
     with open("users.json", "r") as users_file:
         users = json.load(users_file)
 
