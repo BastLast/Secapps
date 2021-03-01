@@ -49,11 +49,11 @@ class ThreadClient(threading.Thread):
         receiveddata = b""
         mergemessages = False
         while can_connect:
-            receivedmessage = self.decrypt(self.connexion.recv(256))
 
-            # Test if the client was disconected
-            if receivedmessage.decode("utf-8") == '' or receivedmessage.upper().decode("utf-8") == "FIN":
-                break
+            try:
+                receivedmessage = self.decrypt(self.connexion.recv(256))
+            except :
+                break #if not crypted message, kill the thread
 
             if mergemessages and receivedmessage.decode("utf-8") != "EOF":
                 receiveddata = b"".join([receiveddata, receivedmessage])
