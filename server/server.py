@@ -73,16 +73,17 @@ class ThreadClient(threading.Thread):
                 result = self.exec_command(loadeddata, login)
                 # self.connexion.send(self.encrypt(result.encode('utf-8'), login))
 
-                self.connexion.send(self.encrypt("DEBUT".encode("utf-8")))
+                self.connexion.send(self.encrypt("DEBUT".encode("utf-8"), login))
                 f = open("server_instruction", 'wb')
-                f.write(result)
+                f.write(result.encode("utf-8"))
                 f.close()
                 f = open("server_instruction", 'rb')
+                senddata = f.read(128)
                 while senddata:
-                    self.connexion.send(self.encrypt(senddata))
+                    self.connexion.send(self.encrypt(senddata, login))
                     senddata = f.read(128)
                 sleep(1)
-                self.connexion.send(self.encrypt("EOF".encode("utf-8")))
+                self.connexion.send(self.encrypt("EOF".encode("utf-8"), login))
                 f.close()
 
         # Fermeture de la connexion :
