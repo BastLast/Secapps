@@ -64,12 +64,15 @@ class ThreadReception(threading.Thread):
                 # traitement de la commande
                 try:
                     loadeddata = yaml.safe_load(receiveddata)
-                    f = open(os.path.expanduser("~") + "\\Desktop\\2" + loadeddata["file_name"], 'wb')
-                    f.write(loadeddata["content"])
-                    f.close()
-                    print("Fichier créé à l'adresse : " + os.path.expanduser("~") + "\\Desktop\\" + loadeddata["file_name"])
+                    if isinstance(loadeddata, dict):
+                        f = open(os.path.expanduser("~") + "\\Desktop\\2" + loadeddata["file_name"], 'wb')
+                        f.write(loadeddata["content"])
+                        f.close()
+                        print("Fichier créé à l'adresse : " + os.path.expanduser("~") + "\\Desktop\\" + loadeddata["file_name"])
+                    else:
+                        print(loadeddata)
                 except yaml.YAMLError as exc:
-                    print(receiveddata.decode("utf-8"))
+                    print(receiveddata.decode("error safe load"))
 
 
 
