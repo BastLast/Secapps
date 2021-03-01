@@ -140,6 +140,7 @@ Instaurer des logs. Les fichiers sont chiffrés pour ne pas être modifiés.
 
 Tester la syntaxe des commandes. Autoriser simplement celles dont nous avons besoin.
 
+De plus, les fichiers sont stockés sous un répertoire du serveur et il n'est pas possible d'accéder à l'extérieur de celui-ci.
 
 ### Multi threads
 
@@ -278,21 +279,34 @@ Probabilité d'occurrence
 **Arborescence:**
 
 *   **Serveur implémente le traitement**
-    *   users
-    *   config
-    *   main
-    *   commands
     *   classes
-        *   user
-        *   file
-        *   folder
+        *   log
+    *   commands
+        *   get
+        *   ls
+        *   perm
+        *   put
+        *   rm
+        *   utils
+    *   files
+        *   _tous les répertoires et fichiers stockés_
+    *   log
+        *   _tous les fichiers de logs_
+    *   config
+    *   clé publique du serveur
+    *   clé privée du serveur
+    *   main (server.py)
+
 *   **Client implémente la CLI**
-    *   main
     *   commands:
-        *   delete
-        *   upload
-        *   download
-        *   share
+        *   get
+        *   ls
+        *   perm
+        *   put
+        *   rm
+    *   clé publique du serveur
+    *   clé privée du serveur
+    *   main (client.py)
 
 
 ## Document d’utilisation
