@@ -102,7 +102,7 @@ class ThreadEmission(threading.Thread):
         return m_parsed
 
     def nf(self, args):
-        return "Unrecognized command."
+        return "error"
 
     def exec_command(self, args):
         if args is None:
@@ -123,6 +123,7 @@ class ThreadEmission(threading.Thread):
         while 1:
 
             result = self.exec_command(self.parseargs(input()))
+
             if result != "error":
                 print("Envoi de la commande au serveur...")
                 self.connexion.send(self.encrypt("DEBUT".encode("utf-8")))
@@ -137,6 +138,8 @@ class ThreadEmission(threading.Thread):
                 sleep(1)
                 self.connexion.send(self.encrypt("EOF".encode("utf-8")))
                 f.close()
+            else :
+                print("Votre commande n'a pas été reconnue")
 
     def encrypt(self, cleartext):
         with open("publicclient.json", "r") as publicclient:
