@@ -1,3 +1,4 @@
+import base64
 import json
 import yaml
 from os import path
@@ -20,14 +21,9 @@ def get(data, login):
 
     # load the file
     try:
-        with open("files/" + parent + "/" + data.get('file_name') + ".json", "r") as outfile:
+        with open("files/" + parent + "/" + data.get("args")[1], "r") as outfile:
             datade = json.load(outfile)
-
-        # write the file in a file that will be sent
-        try:
-            result = yaml.safe_dump(datade).encode("utf-8")
-        except yaml.YAMLError as exc:
-            print("error : " + exc)
+            result = ("JeSuisUnFichier: " + base64.b64decode(datade["content"].encode()) + " MonNomEst: " + data.get("args")[1])
         return result
     except:
         print("Le fichier n'a pas été trouvé")

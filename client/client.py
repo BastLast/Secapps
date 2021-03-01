@@ -62,7 +62,14 @@ class ThreadReception(threading.Thread):
 
             if not mergemessages:
                 # traitement de la commande
-                print(receiveddata.decode("utf-8"))
+                if receiveddata.decode("utf-8").startswith("JeSuisUnFichier: "):
+                    content = receiveddata.decode("utf-8").split(" ")
+                    f = open(os.path.expanduser("~") + "\\Desktop\\2" + content[3], 'wb')
+                    f.write(content[1].encode("utf-8"))
+                    f.close()
+                    print("Fichier créé à l'adresse : " + os.path.expanduser("~") + "\\Desktop\\" + content[3])
+                else:
+                    print(receiveddata.decode("utf-8"))
 
         # th_E._stop()
         print("Client arrêté. Connexion interrompue.")
