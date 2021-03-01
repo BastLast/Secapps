@@ -1,5 +1,26 @@
 # TP Sécurité des applications
 
+## Installation & exécution
+
+### Installation
+
+Il est nécessaire d'installer au préalable les librairies python suivantes :
+*   daiquiri
+*   PyYAML
+*   crypto
+
+### Exécution
+
+Se placer dans le répertoire d'installation.
+Lancer le serveur depuis le répertoire server
+*   cd server
+*   python3 server.py
+
+Lancer une ou plusieurs instances du client depuis le répertoire client
+*   cd client
+*   python3 client.py
+
+Aucun utilisateur n'existe lors du premier lancement. Celui-ci est créé avec le login et le mot de passe fournis au moment de la connexion au client.
 
 ## Document d’architecture 
 
@@ -94,6 +115,12 @@ User
 
 Il est impossible de révoquer les droits d’un propriétaire.
 
+
+### Ajout d'utilisateurs
+
+Afin d'ajouter un nouvel utilisateur, il suffit de fournir un login qui n'existe pas lors de la connexion.
+Le premier utilisateur créé sur le serveur sera par défaut administrateur, les autres seront utilisateurs simples.
+Il n'est pas possible de donner ou retirer les droits d'administrateur.
 
 ### Sécurité
 
@@ -267,19 +294,6 @@ Probabilité d'occurrence
         *   download
         *   share
 
-## Document d’installation
-
-Récupérer les client et serveur
-
-Eventuellement régler l'ip HOST et le port PORT dans server.py et client.py
-
-Ouvrir un terminal
-
-Installer les modules de chiffrement : pip install pycryptodome
-
-Lancer le serveur en tâche de fond : py server.py 
-
-Lancer le client : py client.py
 
 ## Document d’utilisation
 
