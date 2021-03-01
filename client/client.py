@@ -50,7 +50,6 @@ class ThreadReception(threading.Thread):
 
             if mergemessages and receivedmessage.decode("utf-8") != "EOF":
                 receiveddata = b"".join([receiveddata, receivedmessage])
-                print(receiveddata.decode("utf-8"))
 
             if receivedmessage.decode("utf-8") == "DEBUT":
                 print("debut")
