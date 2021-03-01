@@ -15,6 +15,12 @@ def put(data, login):
             if not has_permission(parentproperties, login, "c"):
                 return "Vous n'avez pas la permission d'écrire ici !"
 
+    if path.exists("files/" + parent + "/" + data.get('file_name')):
+        with open("files/" + parent + "/" + data.get('file_name')) as file:
+            fileproperties = json.load(file)
+            if not has_permission(fileproperties, login, "o"):
+                return "Vous n'avez pas la permission de réécrire ce fichier !"
+
     defaultpermissions = {login: {
         "c": "false",
         "l": "true",
@@ -31,4 +37,4 @@ def put(data, login):
     with open("files/" + parent + "/" + data.get('file_name'), "w") as outfile:
         json.dump(file, outfile)
 
-    return "fichier recu et enregistré"
+    return "Fichier reçu et enregistré."
