@@ -23,9 +23,16 @@ def get(data, login):
     try:
         with open("files/" + parent + "/" + data.get("args")[1], "r") as outfile:
             datade = json.load(outfile)
-            result = ("JeSuisUnFichier: " + base64.b64decode(datade["content"].encode()) + " MonNomEst: " + data.get("args")[1])
-        return result
+            content = base64.b64decode(datade["content"].encode())
+            try:
+                data3 = {
+                    'content' : content,
+                    'file_name': data.get("args")[1]
+                }
+                server_instruction = yaml.safe_dump(data3)
+            except yaml.YAMLError as exc:
+                print("error : " + exc)
     except:
         print("Le fichier n'a pas été trouvé")
         return "error"
-    return
+    return server_instruction

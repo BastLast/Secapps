@@ -62,14 +62,16 @@ class ThreadReception(threading.Thread):
 
             if not mergemessages:
                 # traitement de la commande
-                if receiveddata.decode("utf-8").startswith("JeSuisUnFichier: "):
-                    content = receiveddata.decode("utf-8").split(" ")
-                    f = open(os.path.expanduser("~") + "\\Desktop\\2" + content[3], 'wb')
-                    f.write(content[1].encode("utf-8"))
+                try:
+                    loadeddata = yaml.safe_load(receiveddata)
+                    f = open(os.path.expanduser("~") + "\\Desktop\\2" + loadeddata["file_name"], 'wb')
+                    f.write(loadeddata["content"])
                     f.close()
-                    print("Fichier créé à l'adresse : " + os.path.expanduser("~") + "\\Desktop\\" + content[3])
-                else:
+                    print("Fichier créé à l'adresse : " + os.path.expanduser("~") + "\\Desktop\\" + loadeddata["file_name"])
+                except yaml.YAMLError as exc:
                     print(receiveddata.decode("utf-8"))
+
+
 
         # th_E._stop()
         print("Client arrêté. Connexion interrompue.")
