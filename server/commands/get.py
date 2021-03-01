@@ -8,7 +8,7 @@ from commands.utils import has_permission
 
 def get(data, login):
     parent = login
-
+    toreturn = True
     # check permissions
     if len(data.get("args")) > 2:
         parent = data.get("args")[2]
@@ -16,9 +16,14 @@ def get(data, login):
             return "Erreur, le dossier cible n'existe pas"
         with open("files/" + parent + "/.directory.json") as pfile:
             parentproperties = json.load(pfile)
-            if not has_permission(parentproperties, login, "r"):
-                return "Vous n'avez pas la permission de lire ici !"
-
+            if has_permission(parentproperties, login, "d"):
+                toreturn = False
+        with open("files/" + parent + "/" + data.get("args")[1]) as pfile2:
+            parentproperties = json.load(pfile2)
+            if has_permission(parentproperties, login, "d"):
+                toreturn = False
+        if toreturn:
+            return "Vous n'avez pas la permission de télécharger ici !"
     # load the file
     try:
         with open("files/" + parent + "/" + data.get("args")[1], "r") as outfile:
