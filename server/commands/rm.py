@@ -7,7 +7,7 @@ def rm(data,user):
 
     if len(args) != 2:
         return "Error: Incorrect syntax.\nUsage: rm <file>"
-
+    #os.path.basename(args[1])
     if ".directory.json" in args[1]:
         return "Error: No such file."
 

@@ -50,6 +50,7 @@ class ThreadReception(threading.Thread):
 
             if mergemessages and receivedmessage.decode("utf-8") != "EOF":
                 receiveddata = b"".join([receiveddata, receivedmessage])
+                print(receiveddata.decode("utf-8"))
 
             if receivedmessage.decode("utf-8") == "DEBUT":
                 print("debut")
@@ -62,11 +63,8 @@ class ThreadReception(threading.Thread):
 
             if not mergemessages:
                 # traitement de la commande
-                loadeddata = yaml.safe_load(receiveddata)
-            message_recu = self.decrypt(self.connexion.recv(256), client_thread[self.name])
-            print(message_recu.decode("utf-8"))
-            if message_recu == '' or message_recu.upper() == "FIN":
-                break
+                print(receiveddata.decode("utf-8"))
+
         # th_E._stop()
         print("Client arrêté. Connexion interrompue.")
         self.connexion.close()
