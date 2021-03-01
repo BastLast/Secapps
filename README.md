@@ -325,4 +325,4 @@ Liste des commandes disponibles pour tous les utilisateurs, s’ils disposent de
 
 Le rôle “Utilisateur propriétaire” possède par défaut l’ensemble des permissions sur ses dossiers et fichiers.
 
-Le rôle “Administrateur” possède par défaut les permissions de créer des fichiers et de lister les fichiers et répertoires. De plus, il peut donner ou retirer n’importe quelle permission à n’importe quel utilisateur, sauf lui-même.
+Le rôle “Administrateur” possède par défaut les permissions de lister tous les fichiers et répertoires. De plus, il peut donner ou retirer n’importe quelle permission à n’importe quel utilisateur sur des ficiers ou répertoires dont il n'est pas le propriétaire, sauf aux administrateurs (dont lui-même). 
