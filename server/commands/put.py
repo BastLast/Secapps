@@ -28,7 +28,7 @@ def put(data, login):
         "owner": login,
         "permissions": defaultpermissions
     }
-    with open("files/" + parent + "/" + data.get('file_name') + ".json", "w") as outfile:
+    with open("files/" + parent + "/" + data.get('file_name'), "w") as outfile:
         json.dump(file, outfile)
 
     return "fichier recu et enregistré"

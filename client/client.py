@@ -23,20 +23,59 @@ from commands.rm import rm
 host = '127.0.0.1'
 port = 40000
 secret_code = "JackJack"
-
+client_thread = {}
+login_general = ""
 
 class ThreadReception(threading.Thread):
     # objet thread gérant la réception des messages du serveur
     def __init__(self, conn):
         threading.Thread.__init__(self)
         self.connexion = conn  # réf. du socket de connexion
+        client_thread[self.name] = login_general
+    # A tester quand server pourra envoyer des commandes à client.
+    def decrypt(self, cryptedtext, login):
+        with open("privateclient.json", "r") as privateclient:
+            private_key = RSA.import_key(json.load(privateclient)[login].encode('utf-8'), passphrase=secret_code)
+        decrypted = PKCS1_OAEP.new(private_key).decrypt(cryptedtext)
+        return decrypted
 
     def run(self):
+        receiveddata = b""
+        mergemessages = False
         while 1:
-            message_recu = self.connexion.recv(1024).decode("utf-8")
-            print(message_recu)
-            if message_recu == '' or message_recu.upper() == "FIN":
+            receivedmessage = self.decrypt(self.connexion.recv(256), client_thread[self.name])
+            # Test if the client was disconected
+            if receivedmessage.decode("utf-8") == '' or receivedmessage.upper().decode("utf-8") == "FIN":
                 break
+
+            if mergemessages and receivedmessage.decode("utf-8") != "EOF":
+                receiveddata = b"".join([receiveddata, receivedmessage])
+
+            if receivedmessage.decode("utf-8") == "DEBUT":
+                print("debut")
+                receiveddata = b""
+                mergemessages = True
+
+            if receivedmessage.decode("utf-8") == "EOF":
+                print("fin")
+                mergemessages = False
+
+            if not mergemessages:
+                # traitement de la commande
+                try:
+                    loadeddata = yaml.safe_load(receiveddata)
+                    if isinstance(loadeddata, dict):
+                        f = open(os.path.expanduser("~") + "\\Desktop\\2" + loadeddata["file_name"], 'wb')
+                        f.write(loadeddata["content"])
+                        f.close()
+                        print("Fichier créé à l'adresse : " + os.path.expanduser("~") + "\\Desktop\\" + loadeddata["file_name"])
+                    else:
+                        print(loadeddata)
+                except yaml.YAMLError as exc:
+                    print(receiveddata.decode("error safe load"))
+
+
+
         # th_E._stop()
         print("Client arrêté. Connexion interrompue.")
         self.connexion.close()
@@ -49,6 +88,7 @@ class ThreadEmission(threading.Thread):
     def __init__(self, conn):
         threading.Thread.__init__(self)
         self.connexion = conn  # réf. du socket de connexion
+
 
     def parseargs(self, message):
         m_quotes = message.split("\"")
@@ -83,6 +123,7 @@ class ThreadEmission(threading.Thread):
 
     def run(self):
         while 1:
+
             result = self.exec_command(self.parseargs(input()))
             if result != "error":
                 print("Début de la transmission")
@@ -105,13 +146,6 @@ class ThreadEmission(threading.Thread):
         ciphertext = PKCS1_OAEP.new(public_key).encrypt(cleartext)
         return ciphertext
 
-    # A tester quand server pourra envoyer des commandes à client.
-    def decrypt(self, cryptedtext, login):
-        with open("privateclient.json", "r") as privateclient:
-            private_key = RSA.import_key(json.load(privateclient)[login].encode('utf-8'), passphrase=secret_code)
-        decrypted = PKCS1_OAEP.new(private_key).decrypt(cryptedtext)
-        return decrypted
-
 
 # Programme principal - Établissement de la connexion :
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -120,6 +154,7 @@ try:
     client_socket.connect((host, port))
     response = client_socket.recv(2048)  # Demande login par serveur
     name = input(response.decode('utf-8'))
+    login_general = name
     if name == "server":
         name = input("Ce pseudo n'est pas autorisé, veuillez en choisir un nouveau svp :")
     client_socket.send(name.encode('utf-8'))  # Envoi login

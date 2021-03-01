@@ -7,13 +7,10 @@ def get(args):
         'args': args
     }
 
-    """ print(receiveddoc)
-    f = open("test.png", 'wb')
-    f.write(receiveddoc.get('serialized_file'))
-    f.close()
-    """
-
     server_instruction = yaml.safe_dump(data).encode("UTF-8")
-    # faire le chiffrement du message ici :
 
     return server_instruction
+
+"""    f = open("files/" + parent + "/" + data.get('file_name'), 'wb')
+        f.write(base64.b64decode(datade.get("content").encode()))
+        f.close()"""
